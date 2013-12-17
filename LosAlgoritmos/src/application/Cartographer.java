@@ -10,12 +10,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- *  Provides functionality for loading .map files to the program.
+ *  Provides functionality for loading .map files to the program as a char matrix.
  * @author EliAir
  */
 public class Cartographer {
     private File map;
     private Scanner scanner;
+    
+    /**
+     * Constructor. The parameter file is loaded immediately - toCharArray can be called after this.
+     * @param file
+     * @throws FileNotFoundException 
+     */
     
     public Cartographer(File file) throws FileNotFoundException{
         this.map = file;        
@@ -24,7 +30,11 @@ public class Cartographer {
         }        
     }
 
-    
+    /**
+     * Loads a new map file.      
+     * @param file
+     * @return returns true if the file was loaded successfully.
+     */
     public boolean loadMap(File file){
         map = file;
         return loadFile();
@@ -39,7 +49,7 @@ public class Cartographer {
         }
     }
     /**
-     * 
+     * Parses the .map file to a char matrix and returns it.
      * @return Returns the provided .map as a charMatrix.
      * @throws Exception "Invalid .map format." if the provided .map is not of the correct format.
      */
