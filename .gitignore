@@ -4,3 +4,5 @@
 *.jar
 *.war
 *.ear
+/LosAlgoritmos/nbproject/private/
+/LosAlgoritmos/build/
