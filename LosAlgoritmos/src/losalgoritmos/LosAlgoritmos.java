@@ -40,8 +40,7 @@ public class LosAlgoritmos {
     
     /**
      * Run A* with the specified settings.
-     * @param start Starting point coordinates, {y, x} array
-     * @param goal Ending point coordinates, {y, x} array
+     *
      */
     public void astar(){
         Astar A = new Astar(vertexM, start, goal);
