@@ -18,7 +18,14 @@ public class Astar {
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
-    private static final String suunnat = "VYOA";
+    private static final String suunnat = "LURD";
+    
+    /**
+     * Initializes the Astar so it is ready to run.
+     * @param map The charmatrix representation of the map used by this routing algorithm
+     * @param start The starting point of the route, supplied in {y, x} format coordinate array
+     * @param goal The end point of the route, supplied in {y, x} format coordinate array
+     */
     
     public Astar(Vertex[][] map, int[] start, int[] goal){
         this.map = map;
@@ -31,8 +38,12 @@ public class Astar {
         t.setOnPath(true);
     }
     
+    /**
+     * Runs the Astar algorithm with the provided map, starting point and the goal.
+     * Saves all information to the Vertex objects on the map.
+     */
+    
     public void run() {
-        print();
         //for all to heap
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -49,7 +60,7 @@ public class Astar {
             //u = heap-del-min
             u = heap.poll();
             //for all neighbours v
-            ngbrs = getNaapurit(u);
+            ngbrs = getNeighbors(u);
             for(Vertex v : ngbrs){                                
                 //relax
                 if(v.getDistance()>u.getDistance()){
@@ -72,6 +83,11 @@ public class Astar {
         }
     }
     
+    /**
+     * Finds the shortest path from Vertex[][] path created by running the Astar algorithm.
+     * Used by the run() method after finding the goal.
+     * @param v The vertex at the goal (end point).
+     */
     private void shortestPath(Vertex v){
         ArrayDeque<Vertex> pino = new ArrayDeque<Vertex>();
         pino.push(v);
@@ -85,16 +101,18 @@ public class Astar {
             u=pino.pop();                
             u.setOnPath(true);
         }
-        print();
-//        print2();
     }
     
 
-    
-    private ArrayList<Vertex> getNaapurit(Vertex u){
+    /**
+     * Gets the neighbors of a given vertex on the map.
+     * @param u the vertex whose neighbors are desired.
+     * @return a list of the neighbors
+     */
+    private ArrayList<Vertex> getNeighbors(Vertex u){
         ArrayList<Vertex> ngbrs = new ArrayList<Vertex>();
         for(char c : suunnat.toCharArray()){
-            Vertex v = getNaapuri(u, c);    
+            Vertex v = getNeighbor(u, c);    
             //if v valid (within the map)
             if(v!=null){
                 if(v.getKey()=='.'){
@@ -105,19 +123,30 @@ public class Astar {
         return ngbrs;                
     }
     
-    private Vertex getNaapuri(Vertex u, char c){
+    /**
+     * Gets the neighbor in the specified direction - left, up, right, down, 
+     * @param u the vertex whose neighbor is desired
+     * @param c the direction from which the neighbor is desired, format: L/U/R/D
+     * @return null if the direction is out of map, otherwise the neighbor vertex.
+     */
+    private Vertex getNeighbor(Vertex u, char c){
         int i = 0; int j=0;        
-        if(c=='V'){ j=-1;} 
-        else if(c=='Y'){ i=-1;} 
-        else if(c=='O'){ j=1; } 
-        else if(c=='A'){ i=1; }        
-        try{ //v.getX()>=0 && v.getY()>=0 && v.getX()<map[0].length && v.getY()<map.length            
+        if(c=='L'){ j=-1;} 
+        else if(c=='U'){ i=-1;} 
+        else if(c=='R'){ j=1; } 
+        else if(c=='D'){ i=1; }        
+        //following is for checking:
+        //v.getX()>=0 && v.getY()>=0 && v.getX()<map[0].length && v.getY()<map.length            
+        try{ 
             return map[u.getY()+i][u.getX()+j];
         } catch (ArrayIndexOutOfBoundsException e){ 
             return null;
         }        
     }
     
+    /**
+     * Helper for the constructor, initializes the vertexes on the map and the path matrix.
+     */
     private void init(){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -127,53 +156,29 @@ public class Astar {
         }
         s.setDistance(0);        
     }
-    
-    
-    private void print(){        
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                Vertex v = map[i][j];
-                if(v.isOnPath()){
-                    System.out.print('*');
-                } else {
-                    System.out.print(v.getKey());
-                }
-            }
-            System.out.println("");
-        }
+
+    public Vertex[][] getMap() {
+        return map;
+    }
+
+    public Vertex[][] getPath() {
+        return path;
+    }
+
+    public PriorityQueue<Vertex> getHeap() {
+        return heap;
+    }
+
+    public Vertex getS() {
+        return s;
+    }
+
+    public Vertex getT() {
+        return t;
     }
     
-    private void print2(){        
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                Vertex v = map[i][j];
-                if(v.isOnPath()){
-                    System.out.print(v.getDistance() + "");
-                } else {
-                    System.out.print(v.getKey());
-                }
-            }
-            System.out.println("");
-        }
-    }
     
-    private void printDist(){        
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                Vertex v = map[i][j];
-                if(v.getDistance()>10000){
-                    System.out.print("X  ");
-                } else if(v.getDistance()<10){
-                    System.out.print(v.getDistance() + "  ");
-                } else if(v.getDistance()<100){
-                    System.out.print(v.getDistance() + " ");
-                } else {
-                    System.out.print(v.getDistance()-100 + " ");
-                }  
-            }
-            System.out.println("");
-        }
-    }
+    
 }
 
     

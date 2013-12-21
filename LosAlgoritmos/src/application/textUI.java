@@ -1,4 +1,4 @@
-/*
+                                               /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -14,54 +14,74 @@ import losalgoritmos.LosAlgoritmos;
  */
 public class textUI {
     private Cartographer c;
-    private char[][] map;
-    private boolean mode;
+    private char[][] map;    
     private Scanner s;
+    private LosAlgoritmos la;
+    
 
-    public textUI(boolean mode) throws Exception {
+    public textUI() throws Exception {
         this.c = new Cartographer(new File("./maps/isound1.map"));
         this.map = this.c.toCharMatrix();
-        this.mode = mode;
-        s = new Scanner(System.in);
+        this.la = new LosAlgoritmos();
+        this.s = new Scanner(System.in);
     }
         
     public void run(){
-        System.out.println("---------- TiraLabra 2013: reititysalgoritmeja ----------");
-        System.out.println("Map: ");
-//        printMap();
-        if(mode){
-            // default
-            LosAlgoritmos la = new LosAlgoritmos();
-            la.loadMap(map);
-            la.astar();
+        System.out.println("---------- TiraLabra 2013: A* vs. JPS ----------");
+        System.out.println("Input 'd' for default map and route (quickplay)");
+        System.out.println("Input nothing (enter) to select map and route");
+        while(true){
+            String input = s.nextLine();
             
-        } else {
-            System.out.print("Lähtöpiste i: ");
-            String lahtoi = s.nextLine();
-            System.out.println("");
-            
-            System.out.print("Lähtöpiste j: ");
-            String lahtoj = s.nextLine();
-            System.out.println("");
-            
-            System.out.print("Maali i: ");
-            String maalii = s.nextLine();
-            System.out.println("");
-            
-            System.out.print("Maali j: ");
-            String maalij = s.nextLine();
-            System.out.println("");
-            
-        }
-    }
-    
-    public void printMap(){
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                System.out.print(map[i][j]);
+            if(input.equals("d")){
+                System.out.println("Default map: ");            
+                la.loadMap(map);
+                la.loadStart(1, 37);
+                la.loadGoal(33, 33);
+                la.printMapWithRoute();                
+                la.astar();
+                la.printMapWithRoute();
+                
+                
+            } else if (input == ""){
+                System.out.print("Lähtöpiste i: ");
+                String lahtoi = s.nextLine();                                
+                System.out.println("");
+
+                System.out.print("Lähtöpiste j: ");
+                String lahtoj = s.nextLine();
+                System.out.println("");
+
+                System.out.print("Maali i: ");
+                String maalii = s.nextLine();
+                System.out.println("");
+
+                System.out.print("Maali j: ");
+                String maalij = s.nextLine();
+                System.out.println("");
+                
+                la.loadMap(map);
+                la.loadStart(Integer.parseInt(lahtoi), Integer.parseInt(lahtoj));
+                la.loadGoal(Integer.parseInt(maalii), Integer.parseInt(maalij));
+                la.printMapWithRoute();
+                la.astar();                
+                la.printMapWithRoute();
             }
-            System.out.println("");
         }
-        System.out.println("");
-    }
+               
+            
+            
+        }
+    
+    
+//    public void printMap(){
+//        System.out.println("Map: ");
+//        for (int i = 0; i < map.length; i++) {
+//            for (int j = 0; j < map[0].length; j++) {
+//                System.out.print(map[i][j]);
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("");
+//    }
 }

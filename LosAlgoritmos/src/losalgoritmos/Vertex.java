@@ -5,7 +5,7 @@
 package losalgoritmos;
 
 /**
- *
+ * The class for the graph vertices. Provides functionality for storing information related to that specific vertex.
  * @author EliAir
  */
 public class Vertex implements Comparable<Vertex>{
@@ -15,6 +15,13 @@ public class Vertex implements Comparable<Vertex>{
     private int distance;
     private char key;
     private boolean onPath;
+    
+    /**
+     * Initializes values.
+     * @param x coordinate
+     * @param y coordinate
+     * @param key type of coordinate 
+     */
 
     public Vertex(int x, int y, char key) {
         this.x = x;
@@ -33,6 +40,11 @@ public class Vertex implements Comparable<Vertex>{
         this.onPath = onPath;
     }
 
+    /**
+     * Checks if coordinates match.
+     * @param v to what this is compared.
+     * @return  true if coordinates match, false otherwise.
+     */
     public boolean equals(Vertex v){
         if(this.x==v.getX() && this.y==v.getY()){
 //            System.out.println("dasd");
@@ -82,6 +94,11 @@ public class Vertex implements Comparable<Vertex>{
         this.y = y;
     }
 
+    /**
+     * Natural order based on the distance values.
+     * @param o to what this object is compared to.
+     * @return  -1, 0 or 1.
+     */
     @Override
     public int compareTo(Vertex o) {
         if(this.distance<o.distance){
