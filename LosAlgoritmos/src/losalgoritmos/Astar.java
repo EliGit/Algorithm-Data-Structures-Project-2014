@@ -41,9 +41,10 @@ public class Astar {
     /**
      * Runs the Astar algorithm with the provided map, starting point and the goal.
      * Saves all information to the Vertex objects on the map.
+     * @return the best route as an ArrayList of vertices.
      */
     
-    public void run() {
+    public ArrayList<Vertex> run() {
         //for all to heap
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -71,24 +72,22 @@ public class Astar {
                 }                
                 //if v == target, stop algo, find the route
                 if(v.equals(t)){    
-                    shortestPath(v);
-                    found=true;
-                    break;
+                    return shortestPath(v);
                 }
             }
-            if(found){
-                break;
-            }
         }
+        return null;
     }
     
     /**
      * Finds the shortest path from Vertex[][] path created by running the Astar algorithm.
      * Used by the run() method after finding the goal.
      * @param v The vertex at the goal (end point).
+     * @return the best route as an ArrayList of vertices.
      */
-    private void shortestPath(Vertex v){
+    private ArrayList<Vertex> shortestPath(Vertex v){
         ArrayDeque<Vertex> pino = new ArrayDeque<Vertex>();
+        ArrayList<Vertex> list = new ArrayList<Vertex>();
         pino.push(v);
         Vertex u = path[v.getY()][v.getX()];
         while(!u.equals(s)){                
@@ -97,9 +96,11 @@ public class Astar {
         }                      
         s.setOnPath(true);
         while(!pino.isEmpty()){                
-            u=pino.pop();                
+            u=pino.pop();             
             u.setOnPath(true);
+            list.add(u);
         }
+        return list;
     }
     
 

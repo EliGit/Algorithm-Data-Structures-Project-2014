@@ -1,15 +1,15 @@
 package application;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import losalgoritmos.Vertex;
 
 /**
  * From 
@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
  */
 
 public class ImageExport {
-
+    private BufferedImage bf;
     /**
      * Export an image to a JPG file
      * 
@@ -26,7 +26,7 @@ public class ImageExport {
      * @param image The image to write to file
      * @throws IOException If problems occur during writing of file
      */
-    public static void exportImageToFile(String fileName, RenderedImage image)throws IOException{
+    public void exportImageToFile(String fileName, RenderedImage image)throws IOException{
         File file = new File(fileName);
         //to export to png, change 2 parameter to "png"
         ImageIO.write(image, "jpg", file);
@@ -41,7 +41,7 @@ public class ImageExport {
      * @param rgbValue The two dimensional int array representing the pixels
      * @return A BufferedImage with all the pixels drawn
      */
-    public static BufferedImage convertRGBImage(int[][] rgbValue){
+    public BufferedImage convertRGBImage(int[][] rgbValue){
         int height = rgbValue.length;
         int width = rgbValue[0].length;
 
@@ -68,7 +68,7 @@ public class ImageExport {
      * @param strHeader The text to draw at the top of the image
      * @return A BufferedImage with all the pixels drawn
      */
-    public static BufferedImage convertRGBImageWithHeader(int[][] rgbValue,String strHeader){
+    public BufferedImage convertRGBImageWithHeader(int[][] rgbValue,String strHeader){
         //We add extra pixels on top of the image for the strHeader
         int headerHeight=13;
         int height = rgbValue.length+headerHeight;
@@ -90,36 +90,71 @@ public class ImageExport {
         return bufferedImage;  
     }
     
-    public static void call(int[][][] map) {
+    public BufferedImage call(char[][] map, int bfwidth,int bfheight, int[] start, int[] goal){
         //setup int array
-            int height=map.length;
-            int width=map[0].length;            
-            int[][] pixel = new int [height][width];
+        int height=map.length;
+        int width=map[0].length;            
+        int[][] pixel = new int [height][width];
+
+        int r = 0;
+        int g = 0;
+        int b = 0;
 
         //generate some pattern            
-            for(int y=0; y< height; y++){
-                for(int x=0; x< width; x++){
-                    int r = map[y][x][0];
-                    int g = map[y][x][1];
-                    int b = map[y][x][2];
-//                    System.out.println("r: " + r);
-//                    System.out.println("g: " + g);
-//                    System.out.println("b: " + b);
-                    int color = new Color(r, g, b).getRGB();
-//                    int color = (255 << 24 ) | (red << 16 ) | (green <<  8) | blue;
-                    pixel[y][x]=color;
-                                        
+        for(int y=0; y< height; y++){
+            for(int x=0; x< width; x++){
+                if((y==start[0] && x==start[1]) || (y==goal[0] && x==goal[1])){
+                    r=255;
+                    g=0;
+                    b=0;
                 }
+                else if(map[y][x]=='.'){
+                    r=0;
+                    g=255;
+                    b=0;
+                } else {//black
+                    r=0;
+                    g=0;
+                    b=0;
+                }
+                int color = new Color(r, g, b).getRGB();
+                pixel[y][x]=color;
             }
-            //Create image
-            BufferedImage image = ImageExport.convertRGBImage(pixel);
-        try {
-            //Write it to file
-            ImageExport.exportImageToFile("test1.jpg",image);        
-        } catch (IOException ex) {
-            Logger.getLogger(ImageExport.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        bf = convertRGBImage(pixel);
+        return resize(bf, bfwidth, bfheight);            
     }
+    
+    public BufferedImage update(ArrayList<Vertex> route, int bfwidth,int bfheight){        
+        BufferedImage bufferedImage = new BufferedImage(bf.getWidth(), bf.getHeight(), BufferedImage.TYPE_INT_RGB);        
+        for (int i =0; i<route.size()-1; i++) {
+            Vertex vertex = route.get(i);
+            int rgb = new Color(162,162,162).getRGB();
+            bufferedImage.setRGB(vertex.getX(), vertex.getY(), rgb);
+        }
+                
+        for(int y=0; y< bf.getHeight(); y++){
+            for(int x=0; x< bf.getWidth(); x++){
+                if(bufferedImage.getRGB(x, y)!=new Color(162,162,162).getRGB()){
+                    bufferedImage.setRGB(x,y,bf.getRGB(x, y));
+                }
+                
+            }
+        }
+
+        return resize(bufferedImage, bfwidth, bfheight);
+        
+    }
+    
+    private BufferedImage resize(BufferedImage image, int width, int height) {
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        Graphics2D g2d = (Graphics2D) bi.createGraphics();
+        g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        g2d.drawImage(image, 0, 0, width, height, null);
+        g2d.dispose();
+    return bi;
+}
 }
 
 

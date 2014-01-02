@@ -4,6 +4,8 @@
  */
 package losalgoritmos;
 
+import java.util.ArrayList;
+
 /**
  * Functionality for managing the different routing algorithms.
  * @author EliAir
@@ -13,6 +15,7 @@ public class LosAlgoritmos {
     private Vertex[][] vertexM;
     private int[] start;
     private int[] goal;
+    private ArrayList<Vertex> bestroute;
     
     
     /**
@@ -35,8 +38,8 @@ public class LosAlgoritmos {
     public void astarDefault(){
 //        Astar A = new Astar(vertexM, new int[] {1,1}, new int[] {vertexM.length-3,vertexM[0].length-3});
         Astar A = new Astar(vertexM, new int[] {1,37}, new int[] {33,33});
-        A.run();
-    }
+        bestroute = A.run();
+    }    
     
     /**
      * Run A* with the specified settings.
@@ -44,7 +47,7 @@ public class LosAlgoritmos {
      */
     public void astar(){
         Astar A = new Astar(vertexM, start, goal);
-        A.run();
+        bestroute = A.run();
     }
     
     /**
@@ -142,9 +145,7 @@ public class LosAlgoritmos {
         return goal;
     }
     
-    
-    
-    
-
-    
+    public ArrayList<Vertex> getBestroute() {
+        return bestroute;
+    }    
 }
