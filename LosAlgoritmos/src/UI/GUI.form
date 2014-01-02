@@ -78,17 +78,17 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="mapScrollPane" min="-2" pref="105" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="mapScrollPane" min="-2" pref="139" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="goalValPanel" max="32767" attributes="0"/>
                               <Component id="startValPanel" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="routeButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="routeButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -106,7 +106,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="routeButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="179" max="32767" attributes="0"/>
+                  <EmptySpace pref="176" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -164,7 +164,7 @@
           <SubComponents>
             <Component class="javax.swing.JTextField" name="startValField">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0,0"/>
+                <Property name="text" type="java.lang.String" value="35,35"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startValFieldActionPerformed"/>
@@ -204,7 +204,7 @@
           <SubComponents>
             <Component class="javax.swing.JTextField" name="goalValField">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0,0"/>
+                <Property name="text" type="java.lang.String" value="10,10"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goalValFieldActionPerformed"/>

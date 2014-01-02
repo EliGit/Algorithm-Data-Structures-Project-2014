@@ -5,7 +5,7 @@
 package UI;
 
 import application.Cartographer;
-import application.ImageExport;
+import application.ImageBuilder;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +19,7 @@ import losalgoritmos.LosAlgoritmos;
  */
 public class GUI extends javax.swing.JFrame {
     private Cartographer c;
-    private ImageExport ie;
+    private ImageBuilder ie;
     private MapListModel mapListModel;
     private LosAlgoritmos la;
     private int[] start;
@@ -33,7 +33,7 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {        
         try { c = new Cartographer(new File("./maps/isound1.map"));
         } catch (FileNotFoundException ex) {}
-        ie = new ImageExport();
+        ie = new ImageBuilder();
         mapListModel = new MapListModel();
         la = new LosAlgoritmos();
         initComponents();
@@ -85,7 +85,7 @@ public class GUI extends javax.swing.JFrame {
 
         startValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Goal x,y"));
 
-        startValField.setText("0,0");
+        startValField.setText("35,35");
         startValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startValFieldActionPerformed(evt);
@@ -111,7 +111,7 @@ public class GUI extends javax.swing.JFrame {
 
         goalValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Start x,y"));
 
-        goalValField.setText("0,0");
+        goalValField.setText("10,10");
         goalValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goalValFieldActionPerformed(evt);
@@ -150,13 +150,13 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(settingsPanelLayout.createSequentialGroup()
-                        .add(mapScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(mapScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(goalValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(startValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .add(routeButton))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
             settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -170,7 +170,7 @@ public class GUI extends javax.swing.JFrame {
                         .add(startValPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .add(18, 18, 18)
                 .add(routeButton)
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(176, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -217,6 +217,13 @@ public class GUI extends javax.swing.JFrame {
         route();
     }//GEN-LAST:event_routeButtonActionPerformed
 
+    /**
+     * Draws the currently loaded map. Uses the following information:
+     * startValField x and y coordinates, goalValField x and y coordinates and 
+     * the charMatrix loaded in the system. The map is return as a BufferedImage 
+     * by ImageBuilder and drawn to mapLabel jPanel.
+     */
+    
     public void drawMap(){
         String[] sarr = startValField.getText().split(",");
         this.start = new int[] {Integer.parseInt(sarr[1]),Integer.parseInt(sarr[0])};
@@ -229,12 +236,18 @@ public class GUI extends javax.swing.JFrame {
         try {
             c.loadMap((File) mapList.getSelectedValue());
             charMatrix = c.toCharMatrix();
-            bf = ie.call(charMatrix, 250, 250, start, goal);
+            bf = ie.buildImage(charMatrix, 250, 250, start, goal);
             mapLabel.setIcon(new ImageIcon(bf));
         } catch (Exception ex) {
             System.out.println(ex);
         }        
     }    
+    
+    /**
+     * Runs the routing algorithm and updates the current map with the best route.
+     * Uses LosAlgoritmos class for routing and ImageBuilder to update the graphical
+     * representation of the map.
+     */
     
     public void route(){
         la.loadMap(charMatrix);

@@ -51,7 +51,8 @@ public class LosAlgoritmos {
     }
     
     /**
-     * Prints the map and the found route (all vertices with .isOnPath == true).
+     * Prints the map and the found route (all vertices with .isOnPath == true) to the console.
+     * For debugging.
      */
     
     public void printMapWithRoute(){      
@@ -71,7 +72,8 @@ public class LosAlgoritmos {
     }
     
     /**
-     * Prints the map as chars and the found route (all vertices with .isOnPath == true) as distance values.
+     * Prints the map as chars and the found route (all vertices with .isOnPath == true) as distance values to the console.
+     * For debugging.
      */
     public void printRouteDistances(){     
         System.out.println("");
@@ -89,7 +91,8 @@ public class LosAlgoritmos {
     }
     
     /**
-     * Prints the map as the distance values of the vertices.
+     * Prints the map as the distance values of the vertices to the console.
+     * For debugging.
      */
     
     public void printAllDistances(){        

@@ -10,7 +10,8 @@ import java.util.HashMap;
 import javax.swing.AbstractListModel;
 
 /**
- *
+ * ListModel for the mapList JList in GUI.
+ * Finds all files in ./maps folder and loads them into the program.
  * @author EliAir
  */
 public class MapListModel extends AbstractListModel{
