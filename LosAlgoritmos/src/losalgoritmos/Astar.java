@@ -79,7 +79,6 @@ public class Astar {
             if(found){
                 break;
             }
-            
         }
     }
     

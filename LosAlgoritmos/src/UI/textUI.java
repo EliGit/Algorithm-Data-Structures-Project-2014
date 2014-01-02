@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package application;
+package UI;
 
+import application.Cartographer;
 import java.io.File;
 import java.util.Scanner;
 import losalgoritmos.LosAlgoritmos;
@@ -41,6 +42,7 @@ public class textUI {
                 la.printMapWithRoute();                
                 la.astar();
                 la.printMapWithRoute();
+                la.printAllDistances();
                 
                 
             } else if (input == ""){
