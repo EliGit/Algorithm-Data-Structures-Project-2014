@@ -45,6 +45,8 @@ public class Vertex implements Comparable<Vertex>{
      * @param v to what this is compared.
      * @return  true if coordinates match, false otherwise.
      */
+    
+    
     public boolean equals(Vertex v){
         if(this.x==v.getX() && this.y==v.getY()){
 //            System.out.println("dasd");
@@ -96,15 +98,31 @@ public class Vertex implements Comparable<Vertex>{
 
     /**
      * Natural order based on the distance values.
+     * Formula: distance + toGoal. Default for toGoal is -1 
+     * (not changing this means that the A* is actually Dijkstra)
      * @param o to what this object is compared to.
      * @return  -1, 0 or 1.
      */
     @Override
-    public int compareTo(Vertex o) {
-        if(this.distance<o.distance){
+    public int compareTo(Vertex that) {
+        int thisdist;
+        int thatdist;
+        
+        if(this.distance==that.distance){
+            thisdist=this.toGoal;
+            thatdist=that.toGoal;
+        } else {
+            if(this.distance==Integer.MAX_VALUE) thisdist = Integer.MAX_VALUE;
+            else thisdist = this.distance + this.toGoal;
+                
+            if(that.distance==Integer.MAX_VALUE) thatdist = Integer.MAX_VALUE;
+            else thatdist = that.distance + that.toGoal;
+        }
+
+        if(thisdist < thatdist){
             return -1;
         } 
-        if(this.distance == o.distance){
+        if(thisdist == thatdist){
             return 0;            
         }
         return 1;

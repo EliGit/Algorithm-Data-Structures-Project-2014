@@ -69,4 +69,32 @@ public class VertexTest {
         comp.setDistance(1);
         assertEquals(0, v.compareTo(comp));
     }
+    
+    /**
+     * CompareTo must work correctly with astar manhattan when distance is Integer.MAX_VALUE. 
+     */
+    
+    @Test
+    public void testCompareToInSpecialCases(){
+        Vertex comp = new Vertex(0,0,'.');
+                        
+        v.setDistance(Integer.MAX_VALUE);
+        comp.setDistance(Integer.MAX_VALUE);
+        
+        assertEquals(0, v.compareTo(comp));
+                
+        v.setToGoal(1);        
+        comp.setToGoal(2);
+        assertEquals(-1, v.compareTo(comp));
+        
+        comp.setToGoal(0);
+        assertEquals(1, v.compareTo(comp));
+        
+        
+        comp.setDistance(100);
+        comp.setToGoal(0);
+        assertEquals(1, v.compareTo(comp));
+        
+        
+    }
 }

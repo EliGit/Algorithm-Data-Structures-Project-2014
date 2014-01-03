@@ -15,14 +15,14 @@ import static org.junit.Assert.*;
  * Tests for the A* algorithm.
  * @author EliAir
  */
-public class AstarTest {
+public class AstarDijkstraTest {
     private Astar A;
     private LosAlgoritmos la;
     private Cartographer c;
     private int[] t1;
     private int[] t2;
     
-    public AstarTest() {
+    public AstarDijkstraTest() {
     }
     
     /**
@@ -36,7 +36,7 @@ public class AstarTest {
         c = new Cartographer(new File("./maps/test4.map"));
         t1 = new int[] {0,0};
         t2 = new int[] {2, 2};
-        A = new Astar(createVertexMatrix(), t1, t2, true);
+        A = new Astar(createVertexMatrix(), t1, t2, false);
     }
     
     /**
@@ -89,22 +89,6 @@ public class AstarTest {
         assertEquals(Integer.MAX_VALUE, A.getMap()[1][0].getDistance());
         assertEquals(Integer.MAX_VALUE, A.getMap()[2][0].getDistance());
         assertEquals(Integer.MAX_VALUE, A.getMap()[0][2].getDistance());
-    }
-    
-    /**
-     * Manhattan heuristics test.
-     */
-    
-    @Test
-    public void initSetsToGoalCorrectly(){
-        assertEquals(4, A.getMap()[0][0].getToGoal());
-        assertEquals(3, A.getMap()[0][1].getToGoal());
-        assertEquals(2, A.getMap()[0][2].getToGoal());
-        assertEquals(2, A.getMap()[1][1].getToGoal());
-        assertEquals(1, A.getMap()[2][1].getToGoal());
-        assertEquals(0, A.getMap()[2][2].getToGoal());
-        
-        
     }
     
     

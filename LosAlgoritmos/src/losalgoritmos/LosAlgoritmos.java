@@ -8,11 +8,12 @@ import java.util.ArrayList;
 
 /**
  * Functionality for managing the different routing algorithms.
+ * The routing algorithms save all necessary information to the VertexMatrix,
+ * each vertex knows if it is on the shortest path and what was the distance to it.
  * @author EliAir
  */
 public class LosAlgoritmos {
-//    private char[][] charM;
-    private Vertex[][] vertexM;
+    private Vertex[][] vertexMatrix;
     private int[] start;
     private int[] goal;
     private ArrayList<Vertex> bestroute;
@@ -24,51 +25,79 @@ public class LosAlgoritmos {
      */
 
     public void loadMap(char[][] charM){
-        vertexM = new Vertex[charM.length][charM[0].length];
-        for (int i = 0; i < vertexM.length; i++) {
-            for (int j = 0; j < vertexM[0].length; j++) {
-                vertexM[i][j]=new Vertex(j, i, charM[i][j]);
+        vertexMatrix = new Vertex[charM.length][charM[0].length];
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                vertexMatrix[i][j]=new Vertex(j, i, charM[i][j]);
             }
         }
     }
     
     /**
-     * Run A* with the default settings. For debugging.
+     * Loads the starting point of the route int[] {y, x}.
+     * @param y y coordinate
+     * @param x x coordinate
      */
-    public void astarDefault(){
-//        Astar A = new Astar(vertexM, new int[] {1,1}, new int[] {vertexM.length-3,vertexM[0].length-3});
-        Astar A = new Astar(vertexM, new int[] {1,37}, new int[] {33,33});
-        bestroute = A.run();
-    }    
+    
+    public void loadStart(int y, int x) {
+        this.start = new int[] {y, x};
+        vertexMatrix[y][x].setOnPath(true);
+    }
+    
+    /**
+     * Loads the ending point of the route int[] {y, x}.
+     * @param y y coordinate
+     * @param x x coordinate
+     */
+
+    public void loadGoal(int y, int x) {
+        this.goal = new int[] {y, x};
+        vertexMatrix[y][x].setOnPath(true);
+    }
     
     /**
      * Run A* with the specified settings.
      *
      */
-    public void astar(){
-        Astar A = new Astar(vertexM, start, goal);
+    public void astar(){        
+        Astar A = new Astar(vertexMatrix, start, goal, true);
+        bestroute = A.run();
+    }
+
+    /**
+     * Run Dijkstra with the specified settings.
+     * @return 
+     */
+    public void dijkstra(){
+        Astar A = new Astar(vertexMatrix, start, goal, false);
         bestroute = A.run();
     }
     
-    /**
-     * Prints the map and the found route (all vertices with .isOnPath == true) to the console.
-     * For debugging.
-     */
+
+    public Vertex[][] getVertexMatrix() {
+        return vertexMatrix;
+    }
+
+    public int[] getStart() {
+        return start;
+    }
+
+    public int[] getGoal() {
+        return goal;
+    }
     
-    public void printMapWithRoute(){      
-        System.out.println("");
-        for (int i = 0; i < vertexM.length; i++) {
-            for (int j = 0; j < vertexM[0].length; j++) {
-                Vertex v = vertexM[i][j];
-                if(v.isOnPath()){
-                    System.out.print('*');
-                } else {
-                    System.out.print(v.getKey());
-                }
+    public ArrayList<Vertex> getBestroute() {
+        return bestroute;
+    }    
+    
+    public int comparisons(){
+        int comps=0;
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                if(vertexMatrix[i][j].getDistance()!= Integer.MAX_VALUE) comps++;
             }
-            System.out.println("");
         }
-        System.out.println("");
+        return comps;
     }
     
     /**
@@ -77,9 +106,9 @@ public class LosAlgoritmos {
      */
     public void printRouteDistances(){     
         System.out.println("");
-        for (int i = 0; i < vertexM.length; i++) {
-            for (int j = 0; j < vertexM[0].length; j++) {
-                Vertex v = vertexM[i][j];
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                Vertex v = vertexMatrix[i][j];
                 if(v.isOnPath()){
                     System.out.print(v.getDistance() + "");
                 } else {
@@ -97,9 +126,9 @@ public class LosAlgoritmos {
     
     public void printAllDistances(){        
         System.out.println("");
-        for (int i = 0; i < vertexM.length; i++) {
-            for (int j = 0; j < vertexM[0].length; j++) {
-                Vertex v = vertexM[i][j];
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                Vertex v = vertexMatrix[i][j];
                 if(v.getDistance()>10000){
                     System.out.print("X  ");
                 } else if(v.getDistance()<10){
@@ -113,42 +142,27 @@ public class LosAlgoritmos {
             System.out.println("");
         }
     }
-
-    /**
-     * Loads the starting point of the route int[] {y, x}.
-     * @param y y coordinate
-     * @param x x coordinate
+    
+     /**
+     * Prints the map and the found route (all vertices with .isOnPath == true) to the console.
+     * For debugging.
      */
     
-    public void loadStart(int y, int x) {
-        this.start = new int[] {y, x};
-        vertexM[y][x].setOnPath(true);
+    public void printMapWithRoute(){      
+        System.out.println("");
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                Vertex v = vertexMatrix[i][j];
+                if(v.isOnPath()){
+                    System.out.print('*');
+                } else {
+                    System.out.print(v.getKey());
+                }
+            }
+            System.out.println("");
+        }
+        System.out.println("");
     }
     
-    /**
-     * Loads the ending point of the route int[] {y, x}.
-     * @param y y coordinate
-     * @param x x coordinate
-     */
-
-    public void loadGoal(int y, int x) {
-        this.goal = new int[] {y, x};
-        vertexM[y][x].setOnPath(true);
-    }
-
-    public Vertex[][] getVertexM() {
-        return vertexM;
-    }
-
-    public int[] getStart() {
-        return start;
-    }
-
-    public int[] getGoal() {
-        return goal;
-    }
     
-    public ArrayList<Vertex> getBestroute() {
-        return bestroute;
-    }    
 }

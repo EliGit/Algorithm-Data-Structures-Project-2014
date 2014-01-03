@@ -18,22 +18,23 @@ public class Astar {
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
-    private static final String suunnat = "LURD";
+    private static final String suunnat = "12345678"; //Left, Up, Right, Down
     
     /**
      * Initializes the Astar so it is ready to run.
      * @param map The charmatrix representation of the map used by this routing algorithm
      * @param start The starting point of the route, supplied in {y, x} format coordinate array
      * @param goal The end point of the route, supplied in {y, x} format coordinate array
+     * @param astar true -> use manhattan heuristic, false -> dijkstra
      */
     
-    public Astar(Vertex[][] map, int[] start, int[] goal){
+    public Astar(Vertex[][] map, int[] start, int[] goal, boolean astar){
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
         this.heap = new PriorityQueue<Vertex>(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
-        init();
+        init(astar);
         s.setOnPath(true);
         t.setOnPath(true);
     }
@@ -46,34 +47,40 @@ public class Astar {
     
     public ArrayList<Vertex> run() {
         //for all to heap
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
+        for (int i = 0; i < map.length; i++) 
+            for (int j = 0; j < map[0].length; j++) 
                 heap.add(map[i][j]);
-            }
-        }
+
         
         Vertex u;
         ArrayList<Vertex> ngbrs;
         
+        int count=0;
         //while heap not empty
-        boolean found = false;
         while(!heap.isEmpty()){
             //u = heap-del-min
             u = heap.poll();
+            
+            count++;
+//            System.out.println("count: " + count + " heapsize: " + heap.size() + " count+ heap" + (count+heap.size()));
+//            System.out.println("--x: " + u.getX() + " y: " + u.getY() + " dist: " + u.getDistance() + " togoal: " + u.getToGoal());
+            
             //for all neighbours v
             ngbrs = getNeighbors(u);
-            for(Vertex v : ngbrs){                                
+            for(Vertex v : ngbrs){       
+                //if v == target, stop algo, find the route
+                
+                if(!heap.contains(v)) continue;
+                
                 //relax
                 if(v.getDistance()>u.getDistance()){
-                    heap.remove(v);
+                    boolean wasremoved = heap.remove(v);                    
                     v.setDistance(u.getDistance() + 1);
                     path[v.getY()][v.getX()]=u;
-                    heap.add(v);
-                }                
-                //if v == target, stop algo, find the route
-                if(v.equals(t)){    
-                    return shortestPath(v);
+                    if(wasremoved) heap.add(v);
                 }
+                if(v.equals(t)) return shortestPath(v);
+                
             }
         }
         return null;
@@ -99,6 +106,7 @@ public class Astar {
             u=pino.pop();             
             u.setOnPath(true);
             list.add(u);
+            System.out.println("x: " + u.getX() + " y: " + u.getY());
         }
         return list;
     }
@@ -131,12 +139,15 @@ public class Astar {
      */
     private Vertex getNeighbor(Vertex u, char c){
         int i = 0; int j=0;        
-        if(c=='L'){ j=-1;} 
-        else if(c=='U'){ i=-1;} 
-        else if(c=='R'){ j=1; } 
-        else if(c=='D'){ i=1; }        
-        //following is for checking:
-        //v.getX()>=0 && v.getY()>=0 && v.getX()<map[0].length && v.getY()<map.length            
+        if(c=='1'){ --j;} //left
+        else if(c=='2'){ --j; --i;} 
+        else if(c=='3'){ --i;} //up
+        else if(c=='4'){ --i; ++j;} 
+        else if(c=='5'){ ++j; } //right
+        else if(c=='6'){ ++i; ++j;} 
+        else if(c=='7'){ ++i; } //down
+        else if(c=='8'){ ++i; --j;} 
+
         try{ 
             return map[u.getY()+i][u.getX()+j];
         } catch (ArrayIndexOutOfBoundsException e){ 
@@ -145,17 +156,23 @@ public class Astar {
     }
     
     /**
-     * Helper for the constructor, initializes the vertexes on the map and the path matrix.
+     * Helper for the constructor, initializes the vertices on the map and the path matrix.
      */
-    private void init(){
+    private void init(boolean astar){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].setDistance(Integer.MAX_VALUE);
+                if(astar) map[i][j].setToGoal(manhattan(i, j));
                 this.path[i][j]=null;
             }
         }
         s.setDistance(0);        
     }
+    
+    private int manhattan(int i, int j){
+        return Math.abs((i - t.getY()) + (j-t.getX()));
+    }
+    
 
     public Vertex[][] getMap() {
         return map;

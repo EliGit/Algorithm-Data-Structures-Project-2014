@@ -41,7 +41,7 @@ public class LosAlgoritmosTest {
     public void testConstructor() {
         assertEquals(null, la.getGoal());
         assertEquals(null, la.getStart());
-        assertEquals(null, la.getVertexM());
+        assertEquals(null, la.getVertexMatrix());
     }
     
     /**
@@ -53,8 +53,10 @@ public class LosAlgoritmosTest {
     @Test
     public void testLoadMap() throws Exception{
         la.loadMap(c.toCharMatrix());
-        assertNotNull(la.getVertexM()[0][0]);
-        assertEquals(2, la.getVertexM().length);
+        assertNotNull(la.getVertexMatrix()[0][0]);
+        assertEquals(2, la.getVertexMatrix().length);
+        assertEquals(1, la.getVertexMatrix()[0][1].getX());
+        assertEquals(0, la.getVertexMatrix()[0][1].getY());
     }
     
     /**
@@ -68,7 +70,7 @@ public class LosAlgoritmosTest {
         la.loadStart(1, 1);
         assertEquals(t1[0], la.getStart()[0]);
         assertEquals(t1[1], la.getStart()[1]); 
-        assertTrue(la.getVertexM()[1][1].isOnPath());
+        assertTrue(la.getVertexMatrix()[1][1].isOnPath());
     }
     
     /**
@@ -82,7 +84,7 @@ public class LosAlgoritmosTest {
         la.loadGoal(1, 1);
         assertEquals(t1[0], la.getGoal()[0]);
         assertEquals(t1[1], la.getGoal()[1]); 
-        assertTrue(la.getVertexM()[1][1].isOnPath());
+        assertTrue(la.getVertexMatrix()[1][1].isOnPath());
     }
     
     
