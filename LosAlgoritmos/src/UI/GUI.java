@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import javax.swing.ImageIcon;
+import losalgoritmos.Astar;
 import losalgoritmos.LosAlgoritmos;
 import losalgoritmos.Vertex;
 
@@ -41,6 +42,8 @@ public class GUI extends javax.swing.JFrame {
         mapListModel = new MapListModel();
         la = new LosAlgoritmos();
         initComponents();
+        jTextArea1.setText("1. Choose map\n2. Change coordinates if desired\n (hit when value is changed enter)\n3. Choose settings;\n heuristics are for A* only,\n diagonal for all");
+        
     }
 
     /**
@@ -52,7 +55,7 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        aStarModeGroup = new javax.swing.ButtonGroup();
         settingsPanel = new javax.swing.JPanel();
         mapScrollPane = new javax.swing.JScrollPane();
         mapList = new javax.swing.JList();
@@ -68,18 +71,14 @@ public class GUI extends javax.swing.JFrame {
         astarComps = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        movementCheckBox = new javax.swing.JCheckBox();
+        manhattanButton = new javax.swing.JRadioButton();
+        chebyshevButton = new javax.swing.JRadioButton();
+        chebyshev1Button = new javax.swing.JRadioButton();
+        euclideanButton = new javax.swing.JRadioButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         mapLabel = new javax.swing.JLabel();
-
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 100, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 100, Short.MAX_VALUE)
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,7 +95,7 @@ public class GUI extends javax.swing.JFrame {
 
         startValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Start x,y"));
 
-        startValField.setText("35,35");
+        startValField.setText("10,10");
         startValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startValFieldActionPerformed(evt);
@@ -122,7 +121,7 @@ public class GUI extends javax.swing.JFrame {
 
         goalValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Goal x,y"));
 
-        goalValField.setText("10,10");
+        goalValField.setText("35,35");
         goalValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goalValFieldActionPerformed(evt);
@@ -164,39 +163,73 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel2.setText("Comparisons");
 
+        movementCheckBox.setSelected(true);
+        movementCheckBox.setText("Allow Diagonal ");
+
+        aStarModeGroup.add(manhattanButton);
+        manhattanButton.setSelected(true);
+        manhattanButton.setText("Manhattan");
+
+        aStarModeGroup.add(chebyshevButton);
+        chebyshevButton.setText("Chebyshev 1");
+
+        aStarModeGroup.add(chebyshev1Button);
+        chebyshev1Button.setText("Chebyshev 2");
+
+        aStarModeGroup.add(euclideanButton);
+        euclideanButton.setText("Euclidean");
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
         org.jdesktop.layout.GroupLayout settingsPanelLayout = new org.jdesktop.layout.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
             settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(settingsPanelLayout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                .addContainerGap()
+                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(settingsPanelLayout.createSequentialGroup()
-                        .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jLabel2))
-                    .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                        .add(settingsPanelLayout.createSequentialGroup()
-                            .add(mapScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                .add(goalValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(startValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .add(settingsPanelLayout.createSequentialGroup()
-                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, astarButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, dijkstraButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(settingsPanelLayout.createSequentialGroup()
-                                    .add(astarDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                .add(org.jdesktop.layout.GroupLayout.LEADING, settingsPanelLayout.createSequentialGroup()
+                                    .add(mapScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(astarComps))
-                                .add(settingsPanelLayout.createSequentialGroup()
-                                    .add(dijkstraDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                        .add(goalValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(startValPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .add(org.jdesktop.layout.GroupLayout.LEADING, settingsPanelLayout.createSequentialGroup()
+                                    .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, astarButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, dijkstraButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(dijkstraComps))))))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                        .add(settingsPanelLayout.createSequentialGroup()
+                                            .add(astarDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(astarComps, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                                        .add(settingsPanelLayout.createSequentialGroup()
+                                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                .add(dijkstraDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                .add(jLabel1))
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                .add(jLabel2)
+                                                .add(dijkstraComps))))))
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(settingsPanelLayout.createSequentialGroup()
+                        .add(movementCheckBox)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(chebyshevButton)
+                            .add(manhattanButton)
+                            .add(chebyshev1Button)
+                            .add(euclideanButton))
+                        .addContainerGap(46, Short.MAX_VALUE))))
         );
         settingsPanelLayout.setVerticalGroup(
             settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -222,7 +255,19 @@ public class GUI extends javax.swing.JFrame {
                     .add(astarButton)
                     .add(astarDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(astarComps, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(movementCheckBox)
+                    .add(manhattanButton))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(chebyshevButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(chebyshev1Button)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(euclideanButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 144, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         mapLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -273,11 +318,17 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mapListValueChanged
 
     private void dijkstraButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkstraButtonActionPerformed
-        updateMapWithRoute(true, 1);
+        updateMapWithRoute(true, 0, movementCheckBox.isSelected());
     }//GEN-LAST:event_dijkstraButtonActionPerformed
 
     private void astarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_astarButtonActionPerformed
-        updateMapWithRoute(true, 2);
+        int mode;
+        if(manhattanButton.isSelected()) mode=1;
+        else if(chebyshevButton.isSelected()) mode=2;
+        else if(chebyshev1Button.isSelected()) mode=3;
+        else mode=4;
+                
+        updateMapWithRoute(true, mode, movementCheckBox.isSelected());
     }//GEN-LAST:event_astarButtonActionPerformed
 
     /**
@@ -312,20 +363,32 @@ public class GUI extends javax.swing.JFrame {
      * representation of the map.
      */
     
-    public void updateMapWithRoute(boolean comparisons, int algo){
+    public void updateMapWithRoute(boolean comparisons, int algo, boolean diagonalMovement){
         la.loadMap(charMatrix);
         la.loadStart(start[0], start[1]);
         la.loadGoal(goal[0], goal[1]);
-        if(algo==1) {
-            la.dijkstra();
-            dijkstraDist.setText(""+(la.getBestroute().size()+1));   
+        if(algo==0) {
+            la.astar(Astar.NO_HEURISTIC, diagonalMovement);
+            dijkstraDist.setText(""+(la.getVertexMatrix()[la.getGoal()[0]][la.getGoal()[1]].getDistance()));   
             dijkstraComps.setText(""+la.comparisons());
-        }
-        else if(algo==2) {
-            la.astar();
-            astarDist.setText(""+(la.getBestroute().size()+1));
+        } else {
+            if(algo==1) {
+            la.astar(Astar.MANHATTAN, diagonalMovement);            
+            }
+            else if(algo==2) {
+                la.astar(Astar.DIAGONAL_EQUAL_COST, diagonalMovement);                
+            }
+            else if(algo==3) {
+                la.astar(Astar.DIAGONAL, diagonalMovement);                
+            }
+            else if(algo==4) {
+                la.astar(Astar.EUCLIDEAN, diagonalMovement);                
+            }
+            astarDist.setText(""+(la.getVertexMatrix()[la.getGoal()[0]][la.getGoal()[1]].getDistance()));
             astarComps.setText(""+la.comparisons());
         }
+        
+        
         
         la.printAllDistances();
         
@@ -373,20 +436,27 @@ public class GUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup aStarModeGroup;
     private javax.swing.JButton astarButton;
     private javax.swing.JTextField astarComps;
     private javax.swing.JTextField astarDist;
+    private javax.swing.JRadioButton chebyshev1Button;
+    private javax.swing.JRadioButton chebyshevButton;
     private javax.swing.JButton dijkstraButton;
     private javax.swing.JTextField dijkstraComps;
     private javax.swing.JTextField dijkstraDist;
+    private javax.swing.JRadioButton euclideanButton;
     private javax.swing.JTextField goalValField;
     private javax.swing.JPanel goalValPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JRadioButton manhattanButton;
     private javax.swing.JLabel mapLabel;
     private javax.swing.JList mapList;
     private javax.swing.JScrollPane mapScrollPane;
+    private javax.swing.JCheckBox movementCheckBox;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.JTextField startValField;
     private javax.swing.JPanel startValPanel;

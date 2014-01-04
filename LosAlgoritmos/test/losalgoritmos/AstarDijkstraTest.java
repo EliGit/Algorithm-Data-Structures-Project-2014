@@ -36,7 +36,7 @@ public class AstarDijkstraTest {
         c = new Cartographer(new File("./maps/test4.map"));
         t1 = new int[] {0,0};
         t2 = new int[] {2, 2};
-        A = new Astar(createVertexMatrix(), t1, t2, false);
+        A = new Astar(createVertexMatrix(), t1, t2, Astar.NO_HEURISTIC, false);
     }
     
     /**
@@ -56,6 +56,7 @@ public class AstarDijkstraTest {
         assertEquals(t2[1], A.getT().getX());        
     }
     
+
     /**
      * A* should set vertex.isOnPath() correctly.
      */
@@ -81,14 +82,14 @@ public class AstarDijkstraTest {
     @Test
     public void runSetsDistancesCorrectly(){        
         A.run();
-        assertEquals(0, A.getMap()[0][0].getDistance());
-        assertEquals(1, A.getMap()[0][1].getDistance());
-        assertEquals(2, A.getMap()[1][1].getDistance());
-        assertEquals(3, A.getMap()[2][1].getDistance());
-        assertEquals(4, A.getMap()[2][2].getDistance());
-        assertEquals(Integer.MAX_VALUE, A.getMap()[1][0].getDistance());
-        assertEquals(Integer.MAX_VALUE, A.getMap()[2][0].getDistance());
-        assertEquals(Integer.MAX_VALUE, A.getMap()[0][2].getDistance());
+        assertEquals(0, A.getMap()[0][0].getDistance(), 0.002);
+        assertEquals(1, A.getMap()[0][1].getDistance(), 0.002);
+        assertEquals(2, A.getMap()[1][1].getDistance(), 0.002);
+        assertEquals(3, A.getMap()[2][1].getDistance(), 0.002);
+        assertEquals(4, A.getMap()[2][2].getDistance(), 0.002);
+        assertEquals(-1, A.getMap()[1][0].getDistance(), 0.002);
+        assertEquals(-1, A.getMap()[2][0].getDistance(), 0.002);
+        assertEquals(-1, A.getMap()[0][2].getDistance(), 0.002);
     }
     
     

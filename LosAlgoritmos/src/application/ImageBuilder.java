@@ -14,7 +14,9 @@ import losalgoritmos.Vertex;
 /**
  * From 
  * Functionality to write and save .map files.
- * @author Parts of code from: http://elsewhat.com/2006/08/17/converting-a-two-dimensional-array-of-ints-to-jpg-image-in-java/
+ * Parts of code from: http://elsewhat.com/2006/08/17/converting-a-two-dimensional-array-of-ints-to-jpg-image-in-java/
+ * 
+ * @author 
  */
 
 public class ImageBuilder {
@@ -115,7 +117,7 @@ public class ImageBuilder {
         for (int y = 0; y < bf.getHeight(); y++) 
             for (int x = 0; x < bf.getWidth(); x++) {
                 if(vertexMatrix[y][x].isOnPath()) bufferedImage.setRGB(x,y, PATH);
-                else if (vertexMatrix[y][x].getDistance()!=Integer.MAX_VALUE) bufferedImage.setRGB(x,y, CALCULATED);
+                else if (vertexMatrix[y][x].getDistance()!=-1) bufferedImage.setRGB(x,y, CALCULATED);
                 else bufferedImage.setRGB(x,y,bf.getRGB(x, y));
             }                
         return resize(bufferedImage, bfwidth, bfheight);

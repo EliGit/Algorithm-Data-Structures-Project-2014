@@ -13,30 +13,41 @@ import java.util.PriorityQueue;
  * @author EliAir
  */
 public class Astar {
+    public final static int NO_HEURISTIC = 0;
+    public final static int MANHATTAN = 1;
+    public final static int DIAGONAL_EQUAL_COST = 2;
+    public final static int DIAGONAL = 3;
+    public final static int EUCLIDEAN = 4;
+    
+
     private Vertex[][] path;
     private PriorityQueue<Vertex> heap;
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
-    private static final String suunnat = "12345678"; //Left, Up, Right, Down
+    private String directions;
+    private int heuristics;
     
     /**
      * Initializes the Astar so it is ready to run.
      * @param map The charmatrix representation of the map used by this routing algorithm
      * @param start The starting point of the route, supplied in {y, x} format coordinate array
      * @param goal The end point of the route, supplied in {y, x} format coordinate array
-     * @param astar true -> use manhattan heuristic, false -> dijkstra
+     * @param heuristics desired heuristic
+     * @param diagonalMovement true -> diagonalMovement is allowed, false -> denied
      */
     
-    public Astar(Vertex[][] map, int[] start, int[] goal, boolean astar){
+    public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
-        this.heap = new PriorityQueue<Vertex>(map.length*map[0].length);
+        this.heap = new PriorityQueue<>(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
-        init(astar);
         s.setOnPath(true);
         t.setOnPath(true);
+        if(diagonalMovement) directions = "12345678";
+        else directions = "1357";
+        this.heuristics=heuristics;
     }
     
     /**
@@ -46,41 +57,42 @@ public class Astar {
      */
     
     public ArrayList<Vertex> run() {
-        //for all to heap
-        for (int i = 0; i < map.length; i++) 
-            for (int j = 0; j < map[0].length; j++) 
-                heap.add(map[i][j]);
-
+        s.setDistance(0);
         
-        Vertex u;
+        heap.add(s);
+
+        Vertex vertex;
         ArrayList<Vertex> ngbrs;
         
-        int count=0;
-        //while heap not empty
         while(!heap.isEmpty()){
-            //u = heap-del-min
-            u = heap.poll();
+            vertex = heap.poll();
+            vertex.setClosed(true);
+//            System.out.println("vertex y: " + vertex.getY() + " x: " + vertex.getX()+ " d: " + vertex.getDistance() + " toGoal: " + vertex.getToGoal() + " f: " + (vertex.getDistance()+vertex.getToGoal()) );
             
-            count++;
-//            System.out.println("count: " + count + " heapsize: " + heap.size() + " count+ heap" + (count+heap.size()));
-//            System.out.println("--x: " + u.getX() + " y: " + u.getY() + " dist: " + u.getDistance() + " togoal: " + u.getToGoal());
+            //if v == target, stop algo, find the route
+            if(vertex.equals(t)) return shortestPath(t=vertex);
             
-            //for all neighbours v
-            ngbrs = getNeighbors(u);
-            for(Vertex v : ngbrs){       
-                //if v == target, stop algo, find the route
+            ngbrs = getNeighbors(vertex);
+            for(Vertex ngbr : ngbrs){                                   
+                if(ngbr.isClosed()) continue;
                 
-                if(!heap.contains(v)) continue;
                 
+                double distance = vertex.getDistance() + ((ngbr.getX() - vertex.getX() == 0 || ngbr.getY() - vertex.getY() == 0) ? 1 : Math.sqrt(2));                
                 //relax
-                if(v.getDistance()>u.getDistance()){
-                    boolean wasremoved = heap.remove(v);                    
-                    v.setDistance(u.getDistance() + 1);
-                    path[v.getY()][v.getX()]=u;
-                    if(wasremoved) heap.add(v);
-                }
-                if(v.equals(t)) return shortestPath(v);
-                
+                if(!ngbr.isOpened() || ngbr.getDistance()>distance){
+                    ngbr.setDistance(distance);
+                    if(ngbr.getToGoal() == -1) ngbr.setToGoal(heuristics(ngbr.getY(), ngbr.getX(), this.heuristics));
+                    
+                    path[ngbr.getY()][ngbr.getX()]=vertex;
+                    
+                    if(!ngbr.isOpened()){
+                        heap.add(ngbr);
+                        ngbr.setOpened(true);
+                    } else {
+                        boolean wasremoved = heap.remove(ngbr);
+                        if(wasremoved) heap.add(ngbr);
+                    }                    
+                }                                
             }
         }
         return null;
@@ -93,8 +105,8 @@ public class Astar {
      * @return the best route as an ArrayList of vertices.
      */
     private ArrayList<Vertex> shortestPath(Vertex v){
-        ArrayDeque<Vertex> pino = new ArrayDeque<Vertex>();
-        ArrayList<Vertex> list = new ArrayList<Vertex>();
+        ArrayDeque<Vertex> pino = new ArrayDeque<>();
+        ArrayList<Vertex> list = new ArrayList<>();
         pino.push(v);
         Vertex u = path[v.getY()][v.getX()];
         while(!u.equals(s)){                
@@ -106,7 +118,7 @@ public class Astar {
             u=pino.pop();             
             u.setOnPath(true);
             list.add(u);
-            System.out.println("x: " + u.getX() + " y: " + u.getY());
+//            System.out.println("x: " + u.getX() + " y: " + u.getY());
         }
         return list;
     }
@@ -119,13 +131,11 @@ public class Astar {
      */
     private ArrayList<Vertex> getNeighbors(Vertex u){
         ArrayList<Vertex> ngbrs = new ArrayList<Vertex>();
-        for(char c : suunnat.toCharArray()){
+        for(char c : directions.toCharArray()){
             Vertex v = getNeighbor(u, c);    
             //if v valid (within the map)
             if(v!=null){
-                if(v.getKey()=='.'){
-                    ngbrs.add(v);
-                }                
+                if(v.getKey()=='.') ngbrs.add(v);
             }            
         }
         return ngbrs;                
@@ -156,24 +166,24 @@ public class Astar {
     }
     
     /**
-     * Helper for the constructor, initializes the vertices on the map and the path matrix.
+     * Implementations of A* heuristics.
+     * When Dijkstra (no heuristics) selected, returns -1
+     * 
+     * @param i y coordinate of current vertex
+     * @param j x coordinate of current vertex
+     * @param heuristic selected heuristic
+     * @return estimate distance to goal
      */
-    private void init(boolean astar){
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                map[i][j].setDistance(Integer.MAX_VALUE);
-                if(astar) map[i][j].setToGoal(manhattan(i, j));
-                this.path[i][j]=null;
-            }
-        }
-        s.setDistance(0);        
+    private double heuristics(int i, int j, int heuristic){
+        int dx = Math.abs(i - t.getY());
+        int dy = Math.abs(j - t.getY());
+        if(heuristic==MANHATTAN) return dy + dx;        
+        if(heuristic==DIAGONAL_EQUAL_COST) return Math.max(dx, dy);
+        if(heuristic==DIAGONAL) return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
+        if(heuristic==EUCLIDEAN) return Math.sqrt(dx * dx + dy * dy);
+        return -1;
     }
     
-    private int manhattan(int i, int j){
-        return Math.abs((i - t.getY()) + (j-t.getX()));
-    }
-    
-
     public Vertex[][] getMap() {
         return map;
     }

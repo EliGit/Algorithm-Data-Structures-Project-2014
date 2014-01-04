@@ -59,20 +59,16 @@ public class LosAlgoritmos {
      * Run A* with the specified settings.
      *
      */
-    public void astar(){        
-        Astar A = new Astar(vertexMatrix, start, goal, true);
+    public void astar(int heuristics, boolean diagonalMovement){        
+        Astar A; 
+        if(heuristics==Astar.MANHATTAN) A = new Astar(vertexMatrix, start, goal, Astar.MANHATTAN, diagonalMovement);
+        else if(heuristics==Astar.DIAGONAL_EQUAL_COST) A = new Astar(vertexMatrix, start, goal, Astar.DIAGONAL_EQUAL_COST, diagonalMovement);
+        else if(heuristics==Astar.DIAGONAL) A = new Astar(vertexMatrix, start, goal, Astar.DIAGONAL, diagonalMovement);
+        else if(heuristics==Astar.EUCLIDEAN) A = new Astar(vertexMatrix, start, goal, Astar.EUCLIDEAN, diagonalMovement);
+        else A = new Astar(vertexMatrix, start, goal, Astar.NO_HEURISTIC, diagonalMovement);        
         bestroute = A.run();
     }
-
-    /**
-     * Run Dijkstra with the specified settings.
-     * @return 
-     */
-    public void dijkstra(){
-        Astar A = new Astar(vertexMatrix, start, goal, false);
-        bestroute = A.run();
-    }
-    
+        
 
     public Vertex[][] getVertexMatrix() {
         return vertexMatrix;
@@ -94,7 +90,7 @@ public class LosAlgoritmos {
         int comps=0;
         for (int i = 0; i < vertexMatrix.length; i++) {
             for (int j = 0; j < vertexMatrix[0].length; j++) {
-                if(vertexMatrix[i][j].getDistance()!= Integer.MAX_VALUE) comps++;
+                if(vertexMatrix[i][j].getDistance() != -1) comps++;
             }
         }
         return comps;
@@ -129,14 +125,15 @@ public class LosAlgoritmos {
         for (int i = 0; i < vertexMatrix.length; i++) {
             for (int j = 0; j < vertexMatrix[0].length; j++) {
                 Vertex v = vertexMatrix[i][j];
-                if(v.getDistance()>10000){
+                int a = (int) Math.round(v.getDistance());
+                if(a==-1){
                     System.out.print("X  ");
-                } else if(v.getDistance()<10){
-                    System.out.print(v.getDistance() + "  ");
-                } else if(v.getDistance()<100){
-                    System.out.print(v.getDistance() + " ");
+                } else if(a<10){
+                    System.out.print(a + "  ");
+                } else if(a<100){
+                    System.out.print(a + " ");
                 } else {
-                    System.out.print(v.getDistance()-100 + " ");
+                    System.out.print(a + " ");
                 }  
             }
             System.out.println("");

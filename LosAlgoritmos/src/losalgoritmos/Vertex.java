@@ -11,10 +11,12 @@ package losalgoritmos;
 public class Vertex implements Comparable<Vertex>{
     private int x;
     private int y;
-    private int toGoal;
-    private int distance;
+    private double toGoal;
+    private double distance;
     private char key;
     private boolean onPath;
+    private boolean closed;
+    private boolean opened;
     
     /**
      * Initializes values.
@@ -30,6 +32,8 @@ public class Vertex implements Comparable<Vertex>{
         this.toGoal = -1;
         this.distance = -1;
         this.onPath = false;
+        this.closed = false;
+        this.opened = false;
     }
 
     public boolean isOnPath() {
@@ -63,19 +67,19 @@ public class Vertex implements Comparable<Vertex>{
         this.key = key;
     }
 
-    public int getToGoal() {
+    public double getToGoal() {
         return toGoal;
     }
 
-    public void setToGoal(int toGoal) {
+    public void setToGoal(double toGoal) {
         this.toGoal = toGoal;
     }
 
-    public int getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -96,6 +100,24 @@ public class Vertex implements Comparable<Vertex>{
         this.y = y;
     }
 
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public boolean isOpened() {
+        return opened;
+    }
+
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
+    
+    
+
     /**
      * Natural order based on the distance values.
      * Formula: distance + toGoal. Default for toGoal is -1 
@@ -105,19 +127,26 @@ public class Vertex implements Comparable<Vertex>{
      */
     @Override
     public int compareTo(Vertex that) {
-        int thisdist;
-        int thatdist;
+        double thisdist;
+        double thatdist;
         
-        if(this.distance==that.distance){
-            thisdist=this.toGoal;
-            thatdist=that.toGoal;
-        } else {
-            if(this.distance==Integer.MAX_VALUE) thisdist = Integer.MAX_VALUE;
-            else thisdist = this.distance + this.toGoal;
-                
-            if(that.distance==Integer.MAX_VALUE) thatdist = Integer.MAX_VALUE;
-            else thatdist = that.distance + that.toGoal;
-        }
+        
+        thisdist = this.toGoal==-1 ? this.distance : this.distance + this.toGoal;
+        thatdist = that.toGoal==-1 ? that.distance : that.distance + that.toGoal;
+        
+//        thisdist = this.distance + this.toGoal;
+//        thatdist = that.distance + that.toGoal;
+        
+//        if(this.distance==that.distance){
+//            thisdist=this.toGoal;
+//            thatdist=that.toGoal;
+//        } else {
+//            if(this.distance==Integer.MAX_VALUE) thisdist = Integer.MAX_VALUE;
+//            else thisdist = this.distance + this.toGoal;
+//                
+//            if(that.distance==Integer.MAX_VALUE) thatdist = Integer.MAX_VALUE;
+//            else thatdist = that.distance + that.toGoal;
+//        }
 
         if(thisdist < thatdist){
             return -1;
