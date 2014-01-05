@@ -120,9 +120,8 @@ public class Vertex implements Comparable<Vertex>{
 
     /**
      * Natural order based on the distance values.
-     * Formula: distance + toGoal. Default for toGoal is -1 
-     * (not changing this means that the A* is actually Dijkstra)
-     * @param o to what this object is compared to.
+     * Formula: distance + toGoal. Default for toGoal is -1 (ignored if deafult) 
+     * @param that to what this object is compared to.
      * @return  -1, 0 or 1.
      */
     @Override
@@ -134,19 +133,6 @@ public class Vertex implements Comparable<Vertex>{
         thisdist = this.toGoal==-1 ? this.distance : this.distance + this.toGoal;
         thatdist = that.toGoal==-1 ? that.distance : that.distance + that.toGoal;
         
-//        thisdist = this.distance + this.toGoal;
-//        thatdist = that.distance + that.toGoal;
-        
-//        if(this.distance==that.distance){
-//            thisdist=this.toGoal;
-//            thatdist=that.toGoal;
-//        } else {
-//            if(this.distance==Integer.MAX_VALUE) thisdist = Integer.MAX_VALUE;
-//            else thisdist = this.distance + this.toGoal;
-//                
-//            if(that.distance==Integer.MAX_VALUE) thatdist = Integer.MAX_VALUE;
-//            else thatdist = that.distance + that.toGoal;
-//        }
 
         if(thisdist < thatdist){
             return -1;

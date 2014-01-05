@@ -14,7 +14,7 @@ import losalgoritmos.Vertex;
 /**
  * From 
  * Functionality to write and save .map files.
- * Parts of code from: http://elsewhat.com/2006/08/17/converting-a-two-dimensional-array-of-ints-to-jpg-image-in-java/
+ * exportImageToFile and convertRGBImage modified from: http://elsewhat.com/2006/08/17/converting-a-two-dimensional-array-of-ints-to-jpg-image-in-java/
  * 
  * @author 
  */
@@ -27,9 +27,10 @@ public class ImageBuilder {
     private static final int CALCULATED = new Color(255,150,150).getRGB();
     
     private BufferedImage bf;
+    
     /**
-     * Export an image to a JPG file
-     * 
+     * Export an image to a JPG file.
+     * !!! THIS METHOD NOT IN USE NOW !!!
      * @param fileName The filename to export to
      * @param image The image to write to file
      * @throws IOException If problems occur during writing of file
@@ -50,7 +51,6 @@ public class ImageBuilder {
         int width = rgbValue[0].length;
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        //we either have to loop through all values, or convert to 1-d array
         for(int y=0; y< height; y++)
             for(int x=0; x< width; x++)
                 bufferedImage.setRGB(x,y,rgbValue[y][x]);  
@@ -123,9 +123,10 @@ public class ImageBuilder {
         return resize(bufferedImage, bfwidth, bfheight);
     }
     
+    
     private BufferedImage resize(BufferedImage image, int width, int height) {
-        int type=0;
-        type = image.getType() == 0? BufferedImage.TYPE_INT_ARGB : image.getType();
+        int type;
+        type = image.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : image.getType();
         BufferedImage resizedImage = new BufferedImage(width, height,type);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(image, 0, 0, width, height, null);

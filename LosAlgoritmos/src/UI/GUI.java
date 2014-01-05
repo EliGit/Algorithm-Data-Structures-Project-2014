@@ -16,7 +16,7 @@ import losalgoritmos.LosAlgoritmos;
 import losalgoritmos.Vertex;
 
 /**
- *
+ * Graphical User Interface.
  * @author EliAir
  */
 public class GUI extends javax.swing.JFrame {
@@ -302,15 +302,27 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Calls drawMap when goalValField event happens.
+     * @param evt 
+     */
     private void goalValFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goalValFieldActionPerformed
         drawMap();
         
     }//GEN-LAST:event_goalValFieldActionPerformed
-
+    /**
+     * Calls drawMap when startValField event happens.
+     * @param evt 
+     */
     private void startValFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startValFieldActionPerformed
         drawMap();
     }//GEN-LAST:event_startValFieldActionPerformed
 
+    /**
+     * Changes the map accordingly when mapList event happens.
+     * Also resets astar and dijkstra text fields.
+     * @param evt 
+     */
     private void mapListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_mapListValueChanged
         if (!evt.getValueIsAdjusting()) {
             System.out.println(mapList.getSelectedValue());
@@ -321,11 +333,21 @@ public class GUI extends javax.swing.JFrame {
             astarComps.setText("-");
         }
     }//GEN-LAST:event_mapListValueChanged
-
+    /**
+     * Updates map with shortest route found by Dijkstra when event happens by calling updateMapWithRoute.
+     * Reads the movementCheckBox to determine diagonal movement.
+     * @param evt 
+     */
     private void dijkstraButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkstraButtonActionPerformed
         updateMapWithRoute(true, 0, movementCheckBox.isSelected());
     }//GEN-LAST:event_dijkstraButtonActionPerformed
-
+    
+    /**
+     * Updates map with shortest route found by A* when event happens by calling updateMapWithRoute.
+     * Reads the movementCheckBox to determine diagonal movement.
+     * Reads the astarModeGroup Buttons to determine heuristic.
+     * @param evt 
+     */
     private void astarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_astarButtonActionPerformed
         int mode;
         if(manhattanButton.isSelected()) mode=1;

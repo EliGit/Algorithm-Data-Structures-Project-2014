@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Functionality for managing the different routing algorithms.
+ * !!! THIS CLASS COULD BE REMOVED WITH SOME REFACTORING, PROBABLY WILL BE AT SOME POINT !!!
  * The routing algorithms save all necessary information to the VertexMatrix,
  * each vertex knows if it is on the shortest path and what was the distance to it.
  * @author EliAir

@@ -43,11 +43,14 @@ public class Astar {
         this.heap = new PriorityQueue<>(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
+        this.heuristics=heuristics;
+        
         s.setOnPath(true);
         t.setOnPath(true);
+        
         if(diagonalMovement) directions = "12345678";
         else directions = "1357";
-        this.heuristics=heuristics;
+        
     }
     
     /**
@@ -57,34 +60,35 @@ public class Astar {
      */
     
     public ArrayList<Vertex> run() {
-        s.setDistance(0);
-        
-        heap.add(s);
-
+        //init
+        s.setDistance(0);        
+        heap.add(s);        
         Vertex vertex;
         ArrayList<Vertex> ngbrs;
         
         while(!heap.isEmpty()){
             vertex = heap.poll();
-            vertex.setClosed(true);
-//            System.out.println("vertex y: " + vertex.getY() + " x: " + vertex.getX()+ " d: " + vertex.getDistance() + " toGoal: " + vertex.getToGoal() + " f: " + (vertex.getDistance()+vertex.getToGoal()) );
-            
-            //if v == target, stop algo, find the route
+            //vertex is closed when the algorithm has dealt with it
+            vertex.setClosed(true);            
+                        
+            //if v == target, stop algo, find the route from path matrix
             if(vertex.equals(t)) return shortestPath(t=vertex);
             
+            //for all neighbours
             ngbrs = getNeighbors(vertex);
-            for(Vertex ngbr : ngbrs){                                   
+            for(Vertex ngbr : ngbrs){
+                //no need to process a vertex that has already been dealt with
                 if(ngbr.isClosed()) continue;
-                
-                
+                //distance == sqrt(2) if diagonal movement to neighbour, else 1
                 double distance = vertex.getDistance() + ((ngbr.getX() - vertex.getX() == 0 || ngbr.getY() - vertex.getY() == 0) ? 1 : Math.sqrt(2));                
-                //relax
+                //relax IF vertex is not opened (not placed to heap yet) OR shorter distance to it has been found
                 if(!ngbr.isOpened() || ngbr.getDistance()>distance){
                     ngbr.setDistance(distance);
-                    if(ngbr.getToGoal() == -1) ngbr.setToGoal(heuristics(ngbr.getY(), ngbr.getX(), this.heuristics));
-                    
+                    //use appropriate heuristic if necessary, -1 is the default value of distance to goal
+                    if(ngbr.getToGoal() == -1) ngbr.setToGoal(heuristics(ngbr.getY(), ngbr.getX(), this.heuristics));                    
                     path[ngbr.getY()][ngbr.getX()]=vertex;
                     
+                    //if vertex was not yet opened, open it and place to heap. Else update its position in heap.
                     if(!ngbr.isOpened()){
                         heap.add(ngbr);
                         ngbr.setOpened(true);
@@ -158,6 +162,7 @@ public class Astar {
         else if(c=='7'){ ++i; } //down
         else if(c=='8'){ ++i; --j;} 
 
+        //easy, lazy way to check if within bounds of the matrix
         try{ 
             return map[u.getY()+i][u.getX()+j];
         } catch (ArrayIndexOutOfBoundsException e){ 
@@ -184,6 +189,8 @@ public class Astar {
         return -1;
     }
     
+    
+    //getters for testing:
     public Vertex[][] getMap() {
         return map;
     }
