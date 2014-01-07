@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import losalgoritmos.Vertex;
+import datastructures.Vertex;
 
 /**
  * From 

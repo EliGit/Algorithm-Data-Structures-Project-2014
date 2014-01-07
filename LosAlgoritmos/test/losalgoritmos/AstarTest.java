@@ -4,6 +4,7 @@
  */
 package losalgoritmos;
 
+import datastructures.Vertex;
 import application.Cartographer;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +37,7 @@ public class AstarTest {
         c = new Cartographer(new File("./maps/test4.map"));
         t1 = new int[] {0,0};
         t2 = new int[] {2, 2};
-        A = new Astar(createVertexMatrix(), t1, t2, Astar.MANHATTAN, false);
+        A = new Astar(createVertexMatrix(), t1, t2, Tools.MANHATTAN, false);
     }
     
     /**
@@ -45,7 +46,7 @@ public class AstarTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull(A.getHeap());
+//        assertNotNull(A.getHeap());
         assertNotNull(A.getMap());
         assertNotNull(A.getPath());
         assertNotNull(A.getS());

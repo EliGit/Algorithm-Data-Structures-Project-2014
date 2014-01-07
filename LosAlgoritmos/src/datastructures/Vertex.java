@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package datastructures;
 
 /**
  * The class for the graph vertices. Provides functionality for storing information related to that specific vertex.
@@ -53,7 +53,6 @@ public class Vertex implements Comparable<Vertex>{
     
     public boolean equals(Vertex v){
         if(this.x==v.getX() && this.y==v.getY()){
-//            System.out.println("dasd");
             return true;
         } 
         return false;
@@ -128,7 +127,7 @@ public class Vertex implements Comparable<Vertex>{
     public int compareTo(Vertex that) {
         double thisdist;
         double thatdist;
-        
+        if(that==null) return 0;
         
         thisdist = this.toGoal==-1 ? this.distance : this.distance + this.toGoal;
         thatdist = that.toGoal==-1 ? that.distance : that.distance + that.toGoal;
@@ -143,6 +142,16 @@ public class Vertex implements Comparable<Vertex>{
         return 1;
         
     }
+
+    @Override
+    public String toString() {
+        return "Vertex{" + "x=" + x + ", y=" + y + ", distance=" + distance + '}';
+    }
+
+  
+    
+    
+    
     
     
 }

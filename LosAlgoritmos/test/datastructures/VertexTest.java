@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package datastructures;
 
+import datastructures.Vertex;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

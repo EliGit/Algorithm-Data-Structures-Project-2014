@@ -4,6 +4,7 @@
  */
 package losalgoritmos;
 
+import datastructures.Vertex;
 import java.util.ArrayList;
 
 /**
@@ -62,12 +63,17 @@ public class LosAlgoritmos {
      */
     public void astar(int heuristics, boolean diagonalMovement){        
         Astar A; 
-        if(heuristics==Astar.MANHATTAN) A = new Astar(vertexMatrix, start, goal, Astar.MANHATTAN, diagonalMovement);
-        else if(heuristics==Astar.DIAGONAL_EQUAL_COST) A = new Astar(vertexMatrix, start, goal, Astar.DIAGONAL_EQUAL_COST, diagonalMovement);
-        else if(heuristics==Astar.DIAGONAL) A = new Astar(vertexMatrix, start, goal, Astar.DIAGONAL, diagonalMovement);
-        else if(heuristics==Astar.EUCLIDEAN) A = new Astar(vertexMatrix, start, goal, Astar.EUCLIDEAN, diagonalMovement);
-        else A = new Astar(vertexMatrix, start, goal, Astar.NO_HEURISTIC, diagonalMovement);        
+        if(heuristics==Tools.MANHATTAN) A = new Astar(vertexMatrix, start, goal, Tools.MANHATTAN, diagonalMovement);
+        else if(heuristics==Tools.DIAGONAL_EQUAL_COST) A = new Astar(vertexMatrix, start, goal, Tools.DIAGONAL_EQUAL_COST, diagonalMovement);
+        else if(heuristics==Tools.DIAGONAL) A = new Astar(vertexMatrix, start, goal, Tools.DIAGONAL, diagonalMovement);
+        else if(heuristics==Tools.EUCLIDEAN) A = new Astar(vertexMatrix, start, goal, Tools.EUCLIDEAN, diagonalMovement);
+        else A = new Astar(vertexMatrix, start, goal, Tools.NO_HEURISTIC, diagonalMovement);        
         bestroute = A.run();
+    }
+    
+    public void JPS(){
+        JPS jps = new JPS(vertexMatrix, start, goal, Tools.MANHATTAN, true);
+        jps.run();
     }
         
 
@@ -127,6 +133,27 @@ public class LosAlgoritmos {
             for (int j = 0; j < vertexMatrix[0].length; j++) {
                 Vertex v = vertexMatrix[i][j];
                 int a = (int) Math.round(v.getDistance());
+                if(a==-1){
+                    System.out.print("X  ");
+                } else if(a<10){
+                    System.out.print(a + "  ");
+                } else if(a<100){
+                    System.out.print(a + " ");
+                } else {
+                    System.out.print(a + " ");
+                }  
+            }
+            System.out.println("");
+        }
+    }
+    
+    
+    public void printAllToGoals(){        
+        System.out.println("");
+        for (int i = 0; i < vertexMatrix.length; i++) {
+            for (int j = 0; j < vertexMatrix[0].length; j++) {
+                Vertex v = vertexMatrix[i][j];
+                int a = (int) Math.round(v.getToGoal());
                 if(a==-1){
                     System.out.print("X  ");
                 } else if(a<10){
