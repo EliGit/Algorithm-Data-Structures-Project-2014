@@ -2,7 +2,6 @@ package application;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -20,11 +19,11 @@ import datastructures.Vertex;
  */
 
 public class ImageBuilder {
-    private static final int PATH = new Color(255,255,0).getRGB();
+    private static final int PATH = new Color(0,0,255).getRGB();
     private static final int POINT = new Color(255,0,0).getRGB();
     private static final int TERRAIN = new Color(255,255,255).getRGB();
     private static final int WALL = new Color(0,0,0).getRGB();
-    private static final int CALCULATED = new Color(255,150,150).getRGB();
+    private static final int CALCULATED = new Color(162,162,162).getRGB();
     
     private BufferedImage bf;
     

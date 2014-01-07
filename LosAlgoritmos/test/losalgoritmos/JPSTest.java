@@ -32,8 +32,8 @@ public class JPSTest {
     
     @Before
     public void setUp() throws FileNotFoundException, Exception {
-        c = new Cartographer(new File("./maps/pruningAC.map"));
-        customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/pruningAC.map"));
+        c = new Cartographer(new File("./maps/testpruningAC.map"));
+        customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/testpruningAC.map"));
     }
     
     @After
@@ -52,7 +52,7 @@ public class JPSTest {
     
     @Test
     public void testPruningB() throws Exception{
-        customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/pruningB.map"));
+        customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/testpruningB.map"));
         ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);    
         for (int i = 0; i < 3; i++) 
@@ -64,7 +64,7 @@ public class JPSTest {
     
     @Test
     public void testPruningC() throws Exception{
-        customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/pruningAC.map"));
+        customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningAC.map"));
         ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);
         for (int i = 0; i < 3; i++) 
@@ -77,7 +77,7 @@ public class JPSTest {
     
     @Test
     public void testPruningD() throws Exception{
-        customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/pruningD.map"));
+        customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningD.map"));
         ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);    
         for (int i = 0; i < 3; i++) 

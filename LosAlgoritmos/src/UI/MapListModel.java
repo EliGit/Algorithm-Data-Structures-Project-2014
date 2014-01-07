@@ -26,7 +26,7 @@ public class MapListModel extends AbstractListModel{
     private void fillTheList(){
         File[] files = new File("./maps").listFiles();
         for (File file : files) {
-            if(!file.getName().contains("test")) list.add(file);
+            if(!file.getName().contains("test")&& file.getName().charAt(0)!='.') list.add(file);
         }
     }
 
