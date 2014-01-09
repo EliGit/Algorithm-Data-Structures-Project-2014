@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package algorithms;
 
 import datastructures.MinHeap;
 import datastructures.Vertex;
@@ -20,13 +20,17 @@ public class Astar {
     
 
     private Vertex[][] path;
-    private PriorityQueue<Vertex> heap;
-//    private MinHeap<Vertex> heap;
+//    private PriorityQueue<Vertex> heap;
+    private MinHeap<Vertex> heap;
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
     private String directions;
     private int heuristics;
+    
+    private boolean utilitymode=false;
+    private Tools Tools;
+    private ArrayList<Vertex> utilityList;
     
     /**
      * Initializes the Astar so it is ready to run.
@@ -38,13 +42,16 @@ public class Astar {
      */
     
     public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
+        Tools = new Tools();
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
-        this.heap = new PriorityQueue<>(map.length*map[0].length);
-//        this.heap = new MinHeap<Vertex>(Vertex.class, map.length*map[0].length);
+//        this.heap = new PriorityQueue<>(map.length*map[0].length);
+        this.heap = new MinHeap<Vertex>(Vertex.class, map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
+        
+        
         
         s.setOnPath(true);
         t.setOnPath(true);
@@ -52,6 +59,12 @@ public class Astar {
         if(diagonalMovement) directions = "12345678";
         else directions = "1357";
         
+    }
+    
+    public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement, boolean utilitymode){        
+        this(map, start, goal, heuristics, diagonalMovement);
+        this.utilitymode=utilitymode;
+        this.utilityList = new ArrayList<>();
     }
     
     /**
@@ -73,12 +86,29 @@ public class Astar {
             vertex = heap.poll();
             //vertex is closed when the algorithm has dealt with it
             vertex.setClosed(true);            
-                        
-            //if v == target, stop algo, find the route from path matrix
-            if(vertex.equals(t)) return Tools.shortestPath(path, t, s);
-            
+                                                
+            //utilitymode used by LosAlgoritmos.closestValidCoordinate
+            if(utilitymode){
+                if(Tools.valid(vertex.getY(), vertex.getX(), map)){
+                    ArrayList<Vertex> list = new ArrayList<Vertex>();
+                    list.add(vertex);                    
+                    return list;
+                }                
+            }
+            //no utilitymode-> proceed normally
+            else {
+                //if v == target, stop algo, find the route from path matrix
+                if(vertex.equals(t)) return Tools.shortestPath(path, t, s);
+            }
+
             //for all neighbours
             ngbrs = Tools.getNeighbors(map, vertex, directions);
+            if(utilitymode) {
+                ngbrs = Tools.getAllNeighbors(map, vertex);
+                for (Vertex vertex1 : ngbrs) {
+                    this.utilityList.add(vertex1);
+                }
+            }
             for(Vertex ngbr : ngbrs){
                 //no need to process a vertex that has already been dealt with
                 if(ngbr.isClosed()) continue;
@@ -98,13 +128,13 @@ public class Astar {
                         heap.add(ngbr);
                         ngbr.setOpened(true);
                     } else {
-//                        heap.update(ngbr);
-                        boolean wasremoved = heap.remove(ngbr);
-                        if(wasremoved) heap.add(ngbr);
+                        heap.update(ngbr);
+//                        boolean wasremoved = heap.remove(ngbr);
+//                        if(wasremoved) heap.add(ngbr);
                     }                    
                 }                                
             }
-        }
+        }        
         return null;
     }
     
@@ -127,6 +157,12 @@ public class Astar {
     public Vertex getT() {
         return t;
     }
+
+    public ArrayList<Vertex> getUtilityList() {
+        return utilityList;
+    }
+    
+    
     
     
     

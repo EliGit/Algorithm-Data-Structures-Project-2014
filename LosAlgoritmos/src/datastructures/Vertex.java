@@ -145,8 +145,12 @@ public class Vertex implements Comparable<Vertex>{
 
     @Override
     public String toString() {
-        return "Vertex{" + "x=" + x + ", y=" + y + ", distance=" + distance + '}';
+        return "Vertex{" + "x=" + x + ", y=" + y + ", key=" + key + '}';
     }
+
+ 
+
+    
 
   
     

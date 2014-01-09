@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package algorithms;
 
+import algorithms.Tools;
+import algorithms.Astar;
+import application.LosAlgoritmos;
 import datastructures.Vertex;
 import application.Cartographer;
 import java.io.File;
@@ -16,14 +19,14 @@ import static org.junit.Assert.*;
  * Tests for the A* algorithm.
  * @author EliAir
  */
-public class AstarTest {
+public class AstarDijkstraTest {
     private Astar A;
     private LosAlgoritmos la;
     private Cartographer c;
     private int[] t1;
     private int[] t2;
     
-    public AstarTest() {
+    public AstarDijkstraTest() {
     }
     
     /**
@@ -37,7 +40,7 @@ public class AstarTest {
         c = new Cartographer(new File("./maps/test4.map"));
         t1 = new int[] {0,0};
         t2 = new int[] {2, 2};
-        A = new Astar(createVertexMatrix(), t1, t2, Tools.MANHATTAN, false);
+        A = new Astar(createVertexMatrix(), t1, t2, Tools.NO_HEURISTIC, false);
     }
     
     /**
@@ -57,6 +60,7 @@ public class AstarTest {
         assertEquals(t2[1], A.getT().getX());        
     }
     
+
     /**
      * A* should set vertex.isOnPath() correctly.
      */
@@ -91,8 +95,6 @@ public class AstarTest {
         assertEquals(-1, A.getMap()[2][0].getDistance(), 0.002);
         assertEquals(-1, A.getMap()[0][2].getDistance(), 0.002);
     }
-    
-    
     
     
     public Vertex[][] createVertexMatrix() throws Exception{

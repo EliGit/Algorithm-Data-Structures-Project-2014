@@ -27,6 +27,7 @@ public class VertexTest {
     
     /**
      * Constructor should set correct initial values.
+     * Do not change initial values, search algorithms and ImageBuilder depend on them.
      */
     
     @Test

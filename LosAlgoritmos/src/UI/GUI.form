@@ -2,7 +2,7 @@
 
 <Form version="1.8" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.ButtonGroup" name="aStarModeGroup">
+    <Component class="javax.swing.ButtonGroup" name="heuristicButtonGroup">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -29,20 +29,20 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="mapLabel" min="-2" pref="600" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="settingsPanel" max="32767" attributes="0"/>
+              <Component id="mapLabel" pref="613" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="settingsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="settingsPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="mapLabel" alignment="0" pref="600" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="mapLabel" max="32767" attributes="0"/>
+                  <Component id="settingsPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -63,82 +63,81 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="285" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="mapScrollPane" min="-2" pref="147" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="mapScrollPane" min="-2" pref="139" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="goalValPanel" max="32767" attributes="0"/>
-                                      <Component id="startValPanel" max="32767" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="startValPanel" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="mapSizePanel" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="goalValPanel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                          <Component id="movementCheckBox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chebyshevButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="manhattanButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="chebyshev1Button" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="euclideanButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="astarButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="dijkstraButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jumpButton" alignment="1" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                                  <Component id="movementCheckBox" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="chebyshevButton" min="-2" max="-2" attributes="0"/>
-                                      <Component id="manhattanButton" min="-2" max="-2" attributes="0"/>
-                                      <Component id="chebyshev1Button" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="euclideanButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="dijkstraDist" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
+                                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="dijkstraComps" pref="86" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="astarButton" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="dijkstraButton" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jumpButton" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="jumpDist" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="astarDist" alignment="0" pref="72" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="dijkstraDist" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                              <Component id="dijkstraComps" pref="86" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="jumpDist" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="astarDist" alignment="0" pref="72" max="32767" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="astarComps" max="32767" attributes="0"/>
-                                              <Component id="jumpComps" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="astarComps" max="32767" attributes="0"/>
+                                      <Component id="jumpComps" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="15" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="mapScrollPane" min="-2" pref="151" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="mapSizePanel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="startValPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="goalValPanel" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="mapScrollPane" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -179,7 +178,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="euclideanButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="139" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -220,7 +219,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="startValField" max="32767" attributes="0"/>
+                      <Component id="startValField" pref="92" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -260,7 +259,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="goalValField" pref="88" max="32767" attributes="0"/>
+                      <Component id="goalValField" pref="92" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -329,7 +328,7 @@
         <Component class="javax.swing.JRadioButton" name="manhattanButton">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="aStarModeGroup"/>
+              <ComponentRef name="heuristicButtonGroup"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Manhattan"/>
@@ -338,7 +337,7 @@
         <Component class="javax.swing.JRadioButton" name="chebyshevButton">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="aStarModeGroup"/>
+              <ComponentRef name="heuristicButtonGroup"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Chebyshev 1"/>
           </Properties>
@@ -346,7 +345,7 @@
         <Component class="javax.swing.JRadioButton" name="chebyshev1Button">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="aStarModeGroup"/>
+              <ComponentRef name="heuristicButtonGroup"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Chebyshev 2"/>
           </Properties>
@@ -354,7 +353,7 @@
         <Component class="javax.swing.JRadioButton" name="euclideanButton">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-              <ComponentRef name="aStarModeGroup"/>
+              <ComponentRef name="heuristicButtonGroup"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Euclidean"/>
           </Properties>
@@ -390,6 +389,46 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jumpComps">
         </Component>
+        <Container class="javax.swing.JPanel" name="mapSizePanel">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Map Size"/>
+              </Border>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                          <Component id="mapSizeLabel" min="-2" pref="86" max="-2" attributes="0"/>
+                          <EmptySpace pref="9" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="42" max="32767" attributes="0"/>
+                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                          <Component id="mapSizeLabel" min="-2" pref="27" max="-2" attributes="0"/>
+                          <EmptySpace pref="8" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="mapSizeLabel">
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="mapLabel">

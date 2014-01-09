@@ -2,13 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package algorithms;
 
+import algorithms.Tools;
+import application.LosAlgoritmos;
 import application.Cartographer;
 import datastructures.Vertex;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +27,7 @@ public class ToolsTest {
     private LosAlgoritmos la;
     private Cartographer c;
     private Vertex[][] map;
+    private Tools Tools;
     
     public ToolsTest() {        
     }
@@ -31,6 +35,7 @@ public class ToolsTest {
     @Before
     public void setUp() {
         v = new Vertex(5,5, '.');
+        Tools = new Tools();
     }
     
     @After
@@ -88,6 +93,34 @@ public class ToolsTest {
     }
     
     @Test
+    public void getAllNeighbors() throws Exception{
+        customSetup();
+        v.setX(1); v.setY(1);
+        
+        list = Tools.getAllNeighbors(map, v);
+        assertTrue(list.contains(map[0][0]));
+        assertTrue(list.contains(map[0][1]));
+        assertTrue(list.contains(map[2][1]));
+        assertTrue(list.contains(map[2][2]));
+        assertTrue(list.contains(map[2][0]));
+        assertTrue(list.contains(map[1][0]));
+        assertTrue(list.contains(map[0][2]));
+        assertTrue(list.contains(map[1][2]));
+        assertEquals(8, list.size());
+        
+        
+        
+        v.setX(0); v.setY(0);
+        list = Tools.getAllNeighbors(map, v);
+        assertTrue(list.contains(map[0][1]));        
+        assertTrue(list.contains(map[1][1]));
+        assertTrue(list.contains(map[1][0]));
+        assertEquals(3, list.size());
+        
+        
+    }
+    
+    @Test
     public void shortestRoute() throws Exception{
         customSetup();
         Vertex[][] path = new Vertex[map.length][map[0].length];
@@ -106,11 +139,33 @@ public class ToolsTest {
         
     }
     
+    @Test
+    public void closestValid() throws Exception{
+        la = new LosAlgoritmos();
+        c = new Cartographer(new File("./maps/combat.map"));
+        la.loadCharMatrix(c.toCharMatrix());
+        Vertex[][] map = la.getVertexMatrix();
+        assertNotNull(map);
+        
+       
+        
+        int[] coord = new int[2];
+        int[] newcoord = null;
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                coord[0]=i; coord[1]=j;
+                newcoord = Tools.closestValidCoordinate(map, coord);
+                assertTrue(Tools.valid(newcoord[0], newcoord[1], map));
+            }
+        }
+    }
+    
     public void customSetup() throws Exception{
         c = new Cartographer(new File("./maps/test4.map"));
         la = new LosAlgoritmos();
-        la.loadMap(c.toCharMatrix());
+        la.loadCharMatrix(c.toCharMatrix());
         ArrayList<Vertex> list = new ArrayList<Vertex>();
         map = la.getVertexMatrix();
     }
+    
 }

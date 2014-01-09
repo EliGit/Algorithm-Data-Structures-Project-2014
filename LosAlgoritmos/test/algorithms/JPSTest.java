@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package algorithms;
 
+import application.LosAlgoritmos;
+import algorithms.JPS;
 import datastructures.Vertex;
 import application.Cartographer;
 import java.io.File;

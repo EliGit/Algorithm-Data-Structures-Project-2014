@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package losalgoritmos;
+package algorithms;
 
 import datastructures.MinHeap;
 import datastructures.Vertex;
@@ -29,9 +29,11 @@ public class JPS {
     private Vertex t;
     private String directions;
     private int heuristics;
+    private Tools Tools;
     
     
     public JPS(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
+        Tools = new Tools();
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
 //        this.heap = new PriorityQueue<>(map.length*map[0].length);
@@ -63,6 +65,7 @@ public class JPS {
             vertex.setClosed(true);            
             //if v == target, stop algo, find the route from path matrix
             if(vertex.equals(t)) return Tools.shortestPath(path, t, s);
+//            System.out.println(vertex);
             
 
             //IDENTIFY SUCCESSORS:
@@ -96,7 +99,7 @@ public class JPS {
                             heap.add(jumpNode);
                             jumpNode.setOpened(true);
                         } else {
-                            heap.add(jumpNode);
+                            heap.update(jumpNode);
 //                            boolean wasremoved = heap.remove(jumpNode);
 //                            if(wasremoved) heap.add(jumpNode);
                         }                    
@@ -118,7 +121,7 @@ public class JPS {
      */
     private int[] jump(int x, int y, int px, int py){
 
-        if (!walkable(x, y)) {
+        if (!valid(x, y)) {
             return null;
         }    
         
@@ -133,19 +136,19 @@ public class JPS {
         // check for forced neighbors
         // along the diagonal
         if (dx != 0 && dy != 0){
-            if((walkable(x-dx,y+dy) && !walkable(x-dx,y))||
-               (walkable(x+dx,y-dy) && !walkable(x,y-dy))){
+            if((valid(x-dx,y+dy) && !valid(x-dx,y))||
+               (valid(x+dx,y-dy) && !valid(x,y-dy))){
                 return new int[] {x, y};
             }
         } else { // horizontally/vertically
             if( dx != 0 ) { // moving along x
-                if((walkable(x+dx,y+1) && !walkable(x,y+1))||
-                   (walkable(x+dx,y-1) && !walkable(x,y-1))){
+                if((valid(x+dx,y+1) && !valid(x,y+1))||
+                   (valid(x+dx,y-1) && !valid(x,y-1))){
                     return new int[] {x, y};
                 }
             } else {
-                if((walkable(x+1,y+dy) && !walkable(x+1,y))||
-                   (walkable(x-1,y+dy) && !walkable(x-1,y))){
+                if((valid(x+1,y+dy) && !valid(x+1,y))||
+                   (valid(x-1,y+dy) && !valid(x-1,y))){
                     return new int[] {x, y};
              }
             }
@@ -162,7 +165,7 @@ public class JPS {
 
         // moving diagonally, must make sure one of the vertical/horizontal
         // neighbors is open to allow the path
-        if(walkable(x+dx,y)|| walkable(x,y+dy)){
+        if(valid(x+dx,y)|| valid(x,y+dy)){
             return jump(x+dx, y+dy, x, y);
         } else {
             return null;
@@ -193,45 +196,47 @@ public class JPS {
             int x = u.getX();
             
             //diagonally
-            if(dx!=0 && dy!=0){
-                
-                if (walkable(x,y + dy)) {
+            if(dx!=0 && dy!=0){                
+                if (valid(x,y + dy)) {
                     ngbrs.add(map[y+dy][x]);
                 }
-                if(walkable(x+dx,y)){
+                if(valid(x+dx,y)){
                     ngbrs.add(map[y][x+dx]);
                 }
-                if(walkable(x,y+dy) || walkable(x+dx,y)){
-                    ngbrs.add(map[y+dy][x+dx]);
+                if(valid(x,y+dy) || valid(x+dx,y)){
+                    if(valid(x+dx, y+dy)) {
+                        ngbrs.add(map[y+dy][x+dx]);
+//                        System.out.println("dy: " +dy+ " dx: "+dx+ " y: "+y+ " x: "+x+ " ");
+                    }                    
                 }
-                if(!walkable(x-dx,y) && walkable(x,y+dy)){
+                if(!valid(x-dx,y) && valid(x,y+dy)){
                     ngbrs.add(map[y+dy][x-dx]);
                 }
-                if(!walkable(x,y-dy) && walkable(x+dx,y)){
+                if(!valid(x,y-dy) && valid(x+dx,y)){
                     ngbrs.add(map[y-dy][x+dx]);
                 }
             } else {//horizontally                
                 if(dx==0){
-                    if (walkable(x,y + dy)) {
-                        if (walkable(x,y + dy)) {
+                    if (valid(x,y + dy)) {
+                        if (valid(x,y + dy)) {
                             ngbrs.add(map[y+dy][x]);
                         }
-                        if (!walkable(x+1,y)) {
+                        if (!valid(x+1,y)) {
                             ngbrs.add(map[y+dy][x+1]);
                         }
-                        if (!walkable(x-1,y)) {
+                        if (!valid(x-1,y)) {
                             ngbrs.add(map[y+dy][x-1]);
                         }
                     }
                 } else {//vertically
-                    if (walkable(x + dx,y)) {
-                        if (walkable(x+dx,y)) {
+                    if (valid(x + dx,y)) {
+                        if (valid(x+dx,y)) {
                             ngbrs.add(map[y][x+dx]);
                         }
-                        if (!walkable(x,y+1)) {
+                        if (!valid(x,y+1)) {
                             ngbrs.add(map[y+1][x+dx]);
                         }
-                        if (!walkable(x,y-1)) {
+                        if (!valid(x,y-1)) {
                             ngbrs.add(map[y-1][x+dx]);
                         }
                     }
@@ -245,7 +250,7 @@ public class JPS {
         return ngbrs;
     }
     
-    private boolean walkable(int x, int y){
+    private boolean valid(int x, int y){
         if(x<0 || y < 0 ||x>=map[0].length || y>=map.length){
             return false;
         }

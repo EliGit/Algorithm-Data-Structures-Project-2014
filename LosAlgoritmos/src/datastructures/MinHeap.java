@@ -85,6 +85,9 @@ public class MinHeap<T extends Comparable> {
      */
     
     public void update(T v){                
+        if(!map.containsKey(v)){
+            add(v);
+        }
         int index = map.get(v);
 
         while (hasParent(index) && heap[index].compareTo(heap[parent(index)]) == -1) {
