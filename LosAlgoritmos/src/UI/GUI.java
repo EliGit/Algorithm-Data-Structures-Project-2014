@@ -112,7 +112,7 @@ public class GUI extends javax.swing.JFrame {
 
         startValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Start x,y"));
 
-        startValField.setText("61,365");
+        startValField.setText("10,10");
         startValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startValFieldActionPerformed(evt);
@@ -138,7 +138,7 @@ public class GUI extends javax.swing.JFrame {
 
         goalValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Goal x,y"));
 
-        goalValField.setText("348,481");
+        goalValField.setText("35,35");
         goalValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goalValFieldActionPerformed(evt);
@@ -556,8 +556,8 @@ public class GUI extends javax.swing.JFrame {
         
         
         
-//        boolean performance = false;
-        boolean performance = true;
+        boolean performance = false;
+//        boolean performance = true;
         if(performance) new Performance().measure();
         else {
 //[365, 61], [481, 348]
