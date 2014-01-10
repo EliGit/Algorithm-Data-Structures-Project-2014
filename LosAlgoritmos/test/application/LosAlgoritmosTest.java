@@ -4,12 +4,10 @@
  */
 package application;
 
-import application.LosAlgoritmos;
-import application.Cartographer;
+import datastructures.Stack;
 import datastructures.Vertex;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -23,7 +21,7 @@ public class LosAlgoritmosTest {
     private Cartographer c;
     private int[] t1;
     private int[] t2;
-    private ArrayList<Vertex> list;
+    private Stack<Vertex> list;
     
     public LosAlgoritmosTest() {
     }
@@ -71,8 +69,7 @@ public class LosAlgoritmosTest {
             assertTrue(list.contains(la.getVertexMatrix()[2][2]));
             assertFalse(list.contains(la.getVertexMatrix()[2][0]));
             
-            list = la.route(t1, t1, LosAlgoritmos.DIJKSTRA, LosAlgoritmos.NO_HEURISTIC, true);
-            assertNull(list);
+
             
         } catch (Exception ex) {
             System.out.println(ex);

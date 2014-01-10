@@ -1,12 +1,12 @@
 package UI;
 
+import datastructures.Stack;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import datastructures.Vertex;
 
@@ -89,10 +89,14 @@ public class ImageBuilder {
      * @return the updated BufferedImage.
      */
     
-    public BufferedImage updateImageWithPath(ArrayList<Vertex> route, int bfwidth,int bfheight){        
-        BufferedImage bufferedImage = new BufferedImage(bf.getWidth(), bf.getHeight(), BufferedImage.TYPE_INT_RGB);
-        for (int i =0; i<route.size()-1; i++)
-            bufferedImage.setRGB(route.get(i).getX(), route.get(i).getY(), PATH);
+    public BufferedImage updateImageWithPath(Stack<Vertex> route, int bfwidth,int bfheight){        
+        BufferedImage bufferedImage = new BufferedImage(bf.getWidth(), bf.getHeight(), BufferedImage.TYPE_INT_RGB);        
+        while(!route.isEmpty()){
+            Vertex v = route.pop();        
+            bufferedImage.setRGB(v.getX(), v.getY(), PATH);
+        }
+        
+            
         
         for(int y=0; y< bf.getHeight(); y++)
             for(int x=0; x< bf.getWidth(); x++)

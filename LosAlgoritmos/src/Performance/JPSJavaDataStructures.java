@@ -2,19 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algorithms;
+package Performance;
 
-import datastructures.MinHeap;
-import datastructures.Queue;
-import datastructures.Stack;
 import datastructures.Vertex;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 /**
- * Implementation of the Jump Point Search algorithm with self-made data structures.
+ *
  * @author EliAir
  */
-public class JPS implements Algo{
+public class JPSJavaDataStructures implements AlgoJava {
     public final static int NO_HEURISTIC = 0;
     public final static int MANHATTAN = 1;
     public final static int DIAGONAL_EQUAL_COST = 2;
@@ -22,20 +21,20 @@ public class JPS implements Algo{
     public final static int EUCLIDEAN = 4;
     
     private Vertex[][] path;
-    private MinHeap<Vertex> heap;
+    private PriorityQueue<Vertex> heap;
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
     private String directions;
     private int heuristics;
-    private Tools Tools;
+    private ToolsJavaDataStructures Tools;
     
     
-    public JPS(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
-        Tools = new Tools();
+    public JPSJavaDataStructures(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
+        Tools = new ToolsJavaDataStructures();
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
-        this.heap = new MinHeap<Vertex>(Vertex.class, map.length*map[0].length);
+        this.heap = new PriorityQueue<>(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
@@ -48,14 +47,15 @@ public class JPS implements Algo{
         
     }
     
-    public Stack<Vertex> run() {
+    public ArrayDeque<Vertex> run() {
+        
         //init
         s.setDistance(0);        
         heap.add(s);        
         s.setOpened(true);
         
         Vertex vertex;
-        Queue<Vertex> ngbrs;
+        ArrayDeque<Vertex> ngbrs;
         
         while(!heap.isEmpty()){
             vertex = heap.poll();
@@ -72,7 +72,7 @@ public class JPS implements Algo{
             ngbrs = getNeighbors(vertex);
 //            for(Vertex ngbr : ngbrs){    
             while(!ngbrs.isEmpty()){
-                Vertex ngbr = ngbrs.deQ();
+                Vertex ngbr = ngbrs.poll();
                 //find next jumpPoint
                 int[] jumpPoint = jump(ngbr.getX(), ngbr.getY(), vertex.getX(), vertex.getY());
                 
@@ -98,10 +98,9 @@ public class JPS implements Algo{
                         if(!jumpNode.isOpened()){                            
                             heap.add(jumpNode);
                             jumpNode.setOpened(true);
-                        } else {
-                            heap.update(jumpNode);
-//                            boolean wasremoved = heap.remove(jumpNode);
-//                            if(wasremoved) heap.add(jumpNode);
+                        } else {                            
+                            boolean wasremoved = heap.remove(jumpNode);
+                            if(wasremoved) heap.add(jumpNode);
                         }                    
                     }
                 }                            
@@ -141,7 +140,7 @@ public class JPS implements Algo{
                 return new int[] {x, y};
             }
         } else { // horizontally/vertically
-            if( dx != 0 ) { 
+            if( dx != 0 ) { // moving along x
                 if((valid(x+dx,y+1) && !valid(x,y+1))||
                    (valid(x+dx,y-1) && !valid(x,y-1))){
                     return new int[] {x, y};
@@ -154,7 +153,7 @@ public class JPS implements Algo{
             }
         }
             
-        
+        // when moving diagonally, must check for vertical/horizontal jump points
         if (dx != 0 && dy != 0) {
             int[] jx = jump(x + dx, y, x, y);
             int[] jy = jump(x, y + dy, x, y);
@@ -163,7 +162,8 @@ public class JPS implements Algo{
             }
         }
 
-        
+        // moving diagonally, must make sure one of the vertical/horizontal
+        // neighbors is open to allow the path
         if(valid(x+dx,y)|| valid(x,y+dy)){
             return jump(x+dx, y+dy, x, y);
         } else {
@@ -183,8 +183,8 @@ public class JPS implements Algo{
     * @return {Array.<[number, number]>} The neighbors found.
     */
     
-    public Queue<Vertex> getNeighbors(Vertex u){
-        Queue<Vertex> ngbrs = new Queue<Vertex>();
+    public ArrayDeque<Vertex> getNeighbors(Vertex u){
+        ArrayDeque<Vertex> ngbrs = new ArrayDeque<Vertex>();
         Vertex parent = path[u.getY()][u.getX()];
         
         if(parent!=null){ //prune
@@ -197,46 +197,46 @@ public class JPS implements Algo{
             //diagonally
             if(dx!=0 && dy!=0){                
                 if (valid(x,y + dy)) {
-                    ngbrs.enQ(map[y+dy][x]);
+                    ngbrs.add(map[y+dy][x]);
                 }
                 if(valid(x+dx,y)){
-                    ngbrs.enQ(map[y][x+dx]);
+                    ngbrs.add(map[y][x+dx]);
                 }
                 if(valid(x,y+dy) || valid(x+dx,y)){
                     if(valid(x+dx, y+dy)) {
-                        ngbrs.enQ(map[y+dy][x+dx]);
+                        ngbrs.add(map[y+dy][x+dx]);
 //                        System.out.println("dy: " +dy+ " dx: "+dx+ " y: "+y+ " x: "+x+ " ");
                     }                    
                 }
                 if(!valid(x-dx,y) && valid(x,y+dy)){
-                    ngbrs.enQ(map[y+dy][x-dx]);
+                    ngbrs.add(map[y+dy][x-dx]);
                 }
                 if(!valid(x,y-dy) && valid(x+dx,y)){
-                    ngbrs.enQ(map[y-dy][x+dx]);
+                    ngbrs.add(map[y-dy][x+dx]);
                 }
             } else {//horizontally                
                 if(dx==0){
                     if (valid(x,y + dy)) {
                         if (valid(x,y + dy)) {
-                            ngbrs.enQ(map[y+dy][x]);
+                            ngbrs.add(map[y+dy][x]);
                         }
                         if (!valid(x+1,y)) {
-                            ngbrs.enQ(map[y+dy][x+1]);
+                            ngbrs.add(map[y+dy][x+1]);
                         }
                         if (!valid(x-1,y)) {
-                            ngbrs.enQ(map[y+dy][x-1]);
+                            ngbrs.add(map[y+dy][x-1]);
                         }
                     }
                 } else {//vertically
                     if (valid(x + dx,y)) {
                         if (valid(x+dx,y)) {
-                            ngbrs.enQ(map[y][x+dx]);
+                            ngbrs.add(map[y][x+dx]);
                         }
                         if (!valid(x,y+1)) {
-                            ngbrs.enQ(map[y+1][x+dx]);
+                            ngbrs.add(map[y+1][x+dx]);
                         }
                         if (!valid(x,y-1)) {
-                            ngbrs.enQ(map[y-1][x+dx]);
+                            ngbrs.add(map[y-1][x+dx]);
                         }
                     }
                 }

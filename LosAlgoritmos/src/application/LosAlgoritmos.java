@@ -7,9 +7,8 @@ package application;
 import algorithms.Astar;
 import algorithms.JPS;
 import algorithms.Tools;
+import datastructures.Stack;
 import datastructures.Vertex;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Functionality for managing the different routing algorithms.
@@ -34,7 +33,7 @@ public class LosAlgoritmos {
     private boolean clearmap;
     private int[] start;
     private int[] goal;
-    private ArrayList<Vertex> bestroute;
+    private Stack<Vertex> bestroute;
     private Tools Tools;
 
     public LosAlgoritmos() {
@@ -54,13 +53,12 @@ public class LosAlgoritmos {
      * @throws Exception if any input is invalid.
      */
    
-    public ArrayList<Vertex> route(int[] start, int[] goal, int algo, int heuristic, boolean diagonalMovement) throws Exception{
+    public Stack<Vertex> route(int[] start, int[] goal, int algo, int heuristic, boolean diagonalMovement) throws Exception{
         if(vertexMatrix==null) throw new Exception("Invalid map!");
         if(!Tools.valid(start[0], start[1], vertexMatrix) || !Tools.valid(goal[0], goal[1], vertexMatrix)) throw new Exception("Invalid coordinate!");
         if(algo<10 || algo > 12) throw new Exception("Invalid algorithm!");
         if(heuristic<0 || heuristic>4) throw new Exception("Invalid heuristic!");
         if(algo!=DIJKSTRA && heuristic==NO_HEURISTIC) heuristic = MANHATTAN;
-        if(start[0]==goal[0] && start[1]==goal[1]) return null;
         
         this.start=start;
         this.goal=goal;
@@ -145,7 +143,7 @@ public class LosAlgoritmos {
         return goal;
     }
     
-    public ArrayList<Vertex> getBestroute() {
+    public Stack<Vertex> getBestroute() {
         return bestroute;
     }    
     

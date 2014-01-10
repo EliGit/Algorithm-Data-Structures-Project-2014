@@ -5,9 +5,9 @@
 package algorithms;
 
 import application.LosAlgoritmos;
-import algorithms.JPS;
 import datastructures.Vertex;
 import application.Cartographer;
+import datastructures.Queue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ public class JPSTest {
     private int[] t2;
     private Vertex s;
     private Vertex g;
+    private Queue<Vertex> list;
     
     public JPSTest() {
     }
@@ -43,8 +44,7 @@ public class JPSTest {
     }
 
     @Test
-    public void testPruningA() {
-        ArrayList<Vertex> list = new ArrayList<>();
+    public void testPruningA() {        
         list = jps.getNeighbors(g);   
         for (int i = 0; i < 3; i++) 
             for (int j = 0; j < 3; j++) 
@@ -55,7 +55,6 @@ public class JPSTest {
     @Test
     public void testPruningB() throws Exception{
         customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/testpruningB.map"));
-        ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);    
         for (int i = 0; i < 3; i++) 
            for (int j = 0; j < 3; j++) 
@@ -67,7 +66,6 @@ public class JPSTest {
     @Test
     public void testPruningC() throws Exception{
         customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningAC.map"));
-        ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);
         for (int i = 0; i < 3; i++) 
            for (int j = 0; j < 3; j++) 
@@ -80,7 +78,6 @@ public class JPSTest {
     @Test
     public void testPruningD() throws Exception{
         customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningD.map"));
-        ArrayList<Vertex> list = new ArrayList<>();
         list = jps.getNeighbors(g);    
         for (int i = 0; i < 3; i++) 
            for (int j = 0; j < 3; j++) 

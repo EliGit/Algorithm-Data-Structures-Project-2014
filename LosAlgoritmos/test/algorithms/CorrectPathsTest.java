@@ -4,12 +4,11 @@
  */
 package algorithms;
 
+import algorithms.Tools;
 import application.LosAlgoritmos;
 import application.Cartographer;
-import datastructures.Vertex;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import org.junit.Before;
@@ -19,17 +18,16 @@ import static org.junit.Assert.*;
 /**
  * Heavy testing for all routing algorithms. 
  * Main idea: results of all three algorithms should be the same, always.
- * Warning: important to reload the map after every search, as the algorithms change the change of the VertexMatrix (the map)
+ * Warning: important to reload the map after every search, as the algorithms change the state of the VertexMatrix (the map)
  * @author EliAir
  */
-public class RoutingAlgorithmTest {
-    private final static double EPSILON = 0.002;
+public class CorrectPathsTest {
+    private final static double EPSILON = 0.5;
     private Tools Tools;
     private LosAlgoritmos la;
     private Cartographer c;
     private int[] t1;
     private int[] t2;
-    private ArrayList<Vertex> list;
     private char[][] charM;
     
     @Before
@@ -50,75 +48,49 @@ public class RoutingAlgorithmTest {
      * @throws Exception 
      */
     @Test
-    public void sameHeuristicRoutingTest() throws Exception{
+    public void diagonalRoutingTest() throws Exception{
         int heuristic=LosAlgoritmos.DIAGONAL;
-        for (int i = 0; i < 1000; i++) {
+        
+        int i = 0;
+        while(true){
+            //two random valid points on the map
             t1 = Tools.randomPoint(la.getVertexMatrix());
             t2 = Tools.randomPoint(la.getVertexMatrix());
+            
+            //LosAlgoritmos.route clears all changes on the map so no need to reload it in between.
             la.route(t1, t2, LosAlgoritmos.DIJKSTRA, LosAlgoritmos.NO_HEURISTIC, true);
             double dijkstra = la.getDistance();
             la.route(t1, t2, LosAlgoritmos.ASTAR, heuristic, true);
             double astar = la.getDistance();
             la.route(t1, t2, LosAlgoritmos.JPS, heuristic, true);
             double jps = la.getDistance();
-            if(Math.abs(dijkstra-astar)>EPSILON || Math.abs(dijkstra-jps)>EPSILON){
+            
+            //if not dijkstra==astar==jps -> log error
+            if(Math.abs(dijkstra-astar)>EPSILON || Math.abs(dijkstra-jps)>EPSILON){                
                 System.out.println(dijkstra);
                 System.out.println(astar);
                 System.out.println(jps);
-                System.out.println(""+Arrays.toString(t1)+","+Arrays.toString(t2));    
-//                    System.out.println(""+Arrays.toString(tt1)+","+Arrays.toString(tt2)); 
-//                    System.out.println(Arrays.toString(la.closestValidCoordinate(tt1)) + " , " + Arrays.toString(la.closestValidCoordinate(tt2)));
+                System.out.println(""+Arrays.toString(t1)+","+Arrays.toString(t2));
+                System.out.print("heuristic: ");
+                if(heuristic==LosAlgoritmos.DIAGONAL) System.out.println(LosAlgoritmos.DIAGONAL);
+                if(heuristic==LosAlgoritmos.DIAGONAL_EQUAL_COST) System.out.println(LosAlgoritmos.DIAGONAL_EQUAL_COST);
+                if(heuristic==LosAlgoritmos.EUCLIDEAN) System.out.println(LosAlgoritmos.EUCLIDEAN);
             }
+            
             assertEquals(dijkstra, astar, EPSILON);                
             assertEquals(dijkstra, jps, EPSILON);
-            if(i%100==0) heuristic++;
+            
+            //change heuristic, there are 3 of them in this test (diagonal sqrt2, diagonal equal cost, euclidean)
+            if(i%200==0) heuristic++;
             if(heuristic>LosAlgoritmos.EUCLIDEAN) break;   
+            
+            //this undoes all changes to the vertices left from running JPS so Tools.randomPoint works
             la.loadCharMatrix(charM);
+            i++;
         }        
     }
     
-    /**
-     * Compares the results of all routing algorithms using different heuristic in each.
-     * Uses EPSILON in comparing the double values. 50 tests per each heuristic.
-     * Manhattan is not tested as it is not consistent when diagonal is allowed.
-     * @throws Exception 
-     */
-    @Test
-    public void differentHeuristicRoutingTest() throws Exception{
-        int heuristic1=LosAlgoritmos.DIAGONAL;
-        int heuristic2=LosAlgoritmos.DIAGONAL_EQUAL_COST;
-        for (int i = 0; i < 1000; i++) {
-            t1 = Tools.randomPoint(la.getVertexMatrix());
-            t2 = Tools.randomPoint(la.getVertexMatrix());
-
-            la.route(t1, t2, LosAlgoritmos.DIJKSTRA, LosAlgoritmos.NO_HEURISTIC, true);
-            double dijkstra = la.getDistance();
-            la.route(t1, t2, LosAlgoritmos.ASTAR, heuristic1, true);
-            double astar = la.getDistance();
-            la.route(t1, t2, LosAlgoritmos.JPS, heuristic2, true);
-            double jps = la.getDistance();        
-
-            if(Math.abs(dijkstra-astar)>EPSILON || Math.abs(dijkstra-jps)>EPSILON){
-                System.out.println(dijkstra);
-                System.out.println(astar);
-                System.out.println(jps);
-                System.out.println(""+Arrays.toString(t1)+","+Arrays.toString(t2));                        
-            } 
-//                else {
-                assertEquals(dijkstra, astar, EPSILON);                
-                assertEquals(dijkstra, jps, EPSILON);
-//                }
-
-
-            if(i%100==0) {
-                heuristic1++;
-                heuristic2++;
-            }
-            if(heuristic1>LosAlgoritmos.EUCLIDEAN) break;
-            if(heuristic2>LosAlgoritmos.EUCLIDEAN) heuristic2=LosAlgoritmos.DIAGONAL;
-            la.loadCharMatrix(charM);
-        }        
-    }
+    
     
     /**
      * Dijkstra and Astar should have same MANHATTAN scores when diagonal not allowed.
@@ -127,7 +99,8 @@ public class RoutingAlgorithmTest {
      */
     @Test
     public void manhattanTests() throws Exception{
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
+            //two random valid points on the map
             t1 = Tools.randomPoint(la.getVertexMatrix());
             t2 = Tools.randomPoint(la.getVertexMatrix());
             
@@ -135,14 +108,18 @@ public class RoutingAlgorithmTest {
             double dijkstra = la.getDistance();
             la.route(t1, t2, LosAlgoritmos.ASTAR, LosAlgoritmos.MANHATTAN, false);
             double astar = la.getDistance();
-                                
+                  
+            //if not dijkstra==astar -> log error
             if(Math.abs(dijkstra-astar)>EPSILON ){
                 System.out.println(dijkstra);
                 System.out.println(astar);
                 System.out.println(""+Arrays.toString(t1)+","+Arrays.toString(t2));    
             } 
-                assertEquals(dijkstra, astar, EPSILON);     
-                la.loadCharMatrix(charM);
+            
+            assertEquals(dijkstra, astar, EPSILON);     
+            
+            //this undoes all changes to the vertices left from running JPS so Tools.randomPoint works
+            la.loadCharMatrix(charM);
         }        
     }
     

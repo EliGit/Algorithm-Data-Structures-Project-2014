@@ -2,24 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algorithms;
+package Performance;
 
 import datastructures.MinHeap;
-import datastructures.Queue;
-import datastructures.Stack;
 import datastructures.Vertex;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
 /**
- * Implementation of the A* algorithm with self-made data structures.
+ * Implementation of the A* algorithm. Currently just Dijkstra.
  * @author EliAir
  */
-public class Astar implements Algo{
+public class AstarJavaDataStructures implements AlgoJava {
 
     
 
     private Vertex[][] path;
-    private MinHeap<Vertex> heap;
+    private PriorityQueue<Vertex> heap;
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
@@ -27,8 +28,8 @@ public class Astar implements Algo{
     private int heuristics;
     
     private boolean utilitymode=false;
-    private Tools Tools;
-    private Stack<Vertex> utilityStack;
+    private ToolsJavaDataStructures Tools;
+    private ArrayDeque<Vertex> utilityStack;
     
     /**
      * Initializes the Astar so it is ready to run.
@@ -39,11 +40,11 @@ public class Astar implements Algo{
      * @param diagonalMovement true -> diagonalMovement is allowed, false -> denied
      */
     
-    public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
-        Tools = new Tools();
+    public AstarJavaDataStructures(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
+        Tools = new ToolsJavaDataStructures();
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
-        this.heap = new MinHeap<Vertex>(Vertex.class, map.length*map[0].length);
+        this.heap = new PriorityQueue<>(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
@@ -58,12 +59,10 @@ public class Astar implements Algo{
         
     }
     
-    public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement, boolean utilitymode){        
+    public AstarJavaDataStructures(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement, boolean utilitymode){        
         this(map, start, goal, heuristics, diagonalMovement);
         this.utilitymode=utilitymode;
-        this.utilityStack = new Stack<>();
-        this.utilityStack.push(s);
-        this.utilityStack.push(t);
+        this.utilityStack = new ArrayDeque<>();
     }
     
     /**
@@ -72,7 +71,7 @@ public class Astar implements Algo{
      * @return the best route as an ArrayList of vertices.
      */
     
-    public Stack<Vertex> run() {
+    public ArrayDeque<Vertex> run() {
         
         //init
         s.setDistance(0);        
@@ -80,7 +79,7 @@ public class Astar implements Algo{
         s.setOpened(true);
         
         Vertex vertex;
-        Queue<Vertex> ngbrs;
+        ArrayDeque<Vertex> ngbrs;
         
         while(!heap.isEmpty()){
             vertex = heap.poll();
@@ -90,10 +89,10 @@ public class Astar implements Algo{
             //utilitymode used by LosAlgoritmos.closestValidCoordinate
             if(utilitymode){
                 if(Tools.valid(vertex.getY(), vertex.getX(), map)){                    
-                    Stack<Vertex> s = new Stack<Vertex>();
+                    ArrayDeque<Vertex> s = new ArrayDeque<Vertex>();
                     s.push(vertex);                    
                     return s;
-                }                
+                }            
             }
             //no utilitymode-> proceed normally
             else {
@@ -106,14 +105,14 @@ public class Astar implements Algo{
             if(utilitymode) {
                 ngbrs = Tools.getAllNeighbors(map, vertex);
                 while(!ngbrs.isEmpty()){
-                    Vertex v = ngbrs.deQ();
+                    Vertex v = ngbrs.poll();
                     this.utilityStack.push(v);
                 }
                 ngbrs = Tools.getAllNeighbors(map, vertex);
             }
 //            for(Vertex ngbr : ngbrs){
             while(!ngbrs.isEmpty()){
-                Vertex ngbr = ngbrs.deQ();
+                Vertex ngbr = ngbrs.poll();
                 //no need to process a vertex that has already been dealt with
                 if(ngbr.isClosed()) continue;
                 //distance == sqrt(2) if diagonal movement to neighbour, else 1
@@ -131,10 +130,9 @@ public class Astar implements Algo{
                     if(!ngbr.isOpened()){
                         heap.add(ngbr);
                         ngbr.setOpened(true);
-                    } else {
-                        heap.update(ngbr);
-//                        boolean wasremoved = heap.remove(ngbr);
-//                        if(wasremoved) heap.add(ngbr);
+                    } else {                        
+                        boolean wasremoved = heap.remove(ngbr);
+                        if(wasremoved) heap.add(ngbr);
                     }                    
                 }                                
             }
@@ -162,7 +160,7 @@ public class Astar implements Algo{
         return t;
     }
 
-    public Stack<Vertex> getUtilityStack() {
+    public ArrayDeque<Vertex> getUtilityStack() {
         return utilityStack;
     }
     

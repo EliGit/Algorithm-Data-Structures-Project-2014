@@ -4,14 +4,14 @@
  */
 package algorithms;
 
-import algorithms.Tools;
 import application.LosAlgoritmos;
 import application.Cartographer;
+import datastructures.Queue;
+import datastructures.Stack;
 import datastructures.Vertex;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  */
 public class ToolsTest {
     private Vertex v;
-    private ArrayList<Vertex> list;
+    private Queue<Vertex> list;
     private LosAlgoritmos la;
     private Cartographer c;
     private Vertex[][] map;
@@ -42,6 +42,9 @@ public class ToolsTest {
     public void tearDown() {
     }
 
+    /**
+     * Heuristics return correct values.
+     */
     @Test
     public void heuristics(){
         for (int i = 1; i < 5; i++) {
@@ -60,6 +63,12 @@ public class ToolsTest {
             assertEquals(5, Tools.heuristics(5,10,i, v), 0.002);
         }                
     }
+    
+    /**
+     * GetNeighbors should return all valid neighbors.
+     * @throws FileNotFoundException
+     * @throws Exception 
+     */
     
     @Test
     public void getNeighbors() throws FileNotFoundException, Exception{
@@ -82,16 +91,20 @@ public class ToolsTest {
         assertTrue(list.contains(map[0][1]));        
         assertTrue(list.contains(map[1][1]));
         assertFalse(list.contains(map[1][0]));
-        assertEquals(2, list.size());
+        assertEquals(2, list.getNumberOfElements());
         
         map[1][0].setKey('.');
         list = Tools.getNeighbors(map, v, "12345678");
         assertTrue(list.contains(map[0][1]));        
         assertTrue(list.contains(map[1][1]));
         assertTrue(list.contains(map[1][0]));
-        assertEquals(3, list.size());
+        assertEquals(3, list.getNumberOfElements());
     }
     
+    /**
+     * getAllNeighbors should return all neighbors that are on the map.
+     * @throws Exception 
+     */
     @Test
     public void getAllNeighbors() throws Exception{
         customSetup();
@@ -106,7 +119,7 @@ public class ToolsTest {
         assertTrue(list.contains(map[1][0]));
         assertTrue(list.contains(map[0][2]));
         assertTrue(list.contains(map[1][2]));
-        assertEquals(8, list.size());
+        assertEquals(8, list.getNumberOfElements());
         
         
         
@@ -115,11 +128,15 @@ public class ToolsTest {
         assertTrue(list.contains(map[0][1]));        
         assertTrue(list.contains(map[1][1]));
         assertTrue(list.contains(map[1][0]));
-        assertEquals(3, list.size());
+        assertEquals(3, list.getNumberOfElements());
         
         
     }
     
+    /**
+     * shortestRoute should return the shortest route in a stack.
+     * @throws Exception 
+     */
     @Test
     public void shortestRoute() throws Exception{
         customSetup();
@@ -129,16 +146,22 @@ public class ToolsTest {
         path[1][1]=map[0][1];
         path[0][1]=map[0][0];
         
-        list = Tools.shortestPath(path, map[2][2], map[0][0]);
+        Stack s;
+        s = Tools.shortestPath(path, map[2][2], map[0][0]);
         
-        assertTrue(list.contains(map[2][2]));
-        assertTrue(list.contains(map[2][1]));
-        assertTrue(list.contains(map[1][1]));
-        assertTrue(list.contains(map[0][1]));
-        assertTrue(list.contains(map[0][0]));
+        assertTrue(s.contains(map[2][2]));
+        assertTrue(s.contains(map[2][1]));
+        assertTrue(s.contains(map[1][1]));
+        assertTrue(s.contains(map[0][1]));
+        assertTrue(s.contains(map[0][0]));
         
     }
     
+    /**
+     * closestValid should find the closest valid coordinate with Dijkstra.
+     * If all is normal, no exceptions should be thrown.
+     * @throws Exception 
+     */
     @Test
     public void closestValid() throws Exception{
         la = new LosAlgoritmos();
@@ -158,6 +181,33 @@ public class ToolsTest {
                 assertTrue(Tools.valid(newcoord[0], newcoord[1], map));
             }
         }
+    }
+    
+    @Test
+    public void closestValidUndoesChanges() throws Exception{
+        la = new LosAlgoritmos();
+        c = new Cartographer(new File("./maps/combat.map"));
+        la.loadCharMatrix(c.toCharMatrix());
+        Vertex[][] map = la.getVertexMatrix();
+        assertNotNull(map);
+        
+        int[] coord = new int[] {100, 10000};
+        Tools.closestValidCoordinate(map, coord);
+        
+        coord = new int[] {14, 15};
+        Tools.closestValidCoordinate(map, coord);
+        
+        for (int i = 0; i < map.length; i++) 
+            for (int j = 0; j < map[0].length; j++) {
+                Vertex v = map[i][j];
+                assertFalse(v.isClosed());
+                assertFalse(v.isOnPath());
+                assertFalse(v.isOpened());
+                assertEquals(-1, v.getFx(), 0.002);
+                assertEquals(-1, v.getDistance(), 0.002);
+                assertEquals(-1, v.getToGoal(), 0.002);
+            }
+        
     }
     
     public void customSetup() throws Exception{

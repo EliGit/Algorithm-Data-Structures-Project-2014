@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algorithms;
+package Performance;
 
-import datastructures.Queue;
-import datastructures.Stack;
+import application.LosAlgoritmos;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import datastructures.Vertex;
 import java.util.Random;
 
@@ -13,7 +14,7 @@ import java.util.Random;
  *
  * @author EliAir
  */
-public class Tools {
+public class ToolsJavaDataStructures {
     public final static int NO_HEURISTIC = 0;
     public final static int MANHATTAN = 1;
     public final static int DIAGONAL_EQUAL_COST = 2;
@@ -49,19 +50,21 @@ public class Tools {
      * @param start The vertex at the start.
      * @return the best route as an ArrayList of vertices.
      */
-    public Stack<Vertex> shortestPath(Vertex[][] path, Vertex goal,  Vertex start){
-        Stack<Vertex> pino = new Stack<>();        
+    public ArrayDeque<Vertex> shortestPath(Vertex[][] path, Vertex goal,  Vertex start){
+        ArrayDeque<Vertex> pino = new ArrayDeque<>();
+        
         pino.push(goal);
+        
         if(goal.equals(start)) return pino;
+        
         Vertex u = path[goal.getY()][goal.getX()];
-        while(!u.equals(start)){     
+        while(!u.equals(start)){   
             u.setOnPath(true);
             pino.push(u);
             u = path[u.getY()][u.getX()];
         }         
         pino.push(u);
-        start.setOnPath(true);
-
+        start.setOnPath(true);        
         return pino;
     }
     
@@ -71,13 +74,13 @@ public class Tools {
      * @param u the vertex whose neighbors are desired.
      * @return a list of the neighbors
      */
-    public Queue<Vertex> getNeighbors(Vertex[][] map, Vertex u, String directions){
-        Queue<Vertex> ngbrs = new Queue<Vertex>();
+    public ArrayDeque<Vertex> getNeighbors(Vertex[][] map, Vertex u, String directions){
+        ArrayDeque<Vertex> ngbrs = new ArrayDeque<Vertex>();
         for(char c : directions.toCharArray()){
             Vertex v = getNeighbor(map, u, c);    
             //if v valid (within the map)
             if(v!=null){
-                if(v.getKey()=='.') ngbrs.enQ(v);
+                if(v.getKey()=='.') ngbrs.add(v);
             }            
         }
         return ngbrs;                
@@ -89,11 +92,11 @@ public class Tools {
      * @return a list of the neighbors
      */
     
-    public Queue<Vertex> getAllNeighbors(Vertex[][] map, Vertex u){
-        Queue<Vertex> ngbrs = new Queue<Vertex>();
+    public ArrayDeque<Vertex> getAllNeighbors(Vertex[][] map, Vertex u){
+        ArrayDeque<Vertex> ngbrs = new ArrayDeque<Vertex>();
         for(char c : "12345678".toCharArray()){
             Vertex v = getNeighbor(map, u, c);   
-            if(v!=null) ngbrs.enQ(v);
+            if(v!=null) ngbrs.add(v);
         }
         return ngbrs; 
     }
@@ -161,7 +164,6 @@ public class Tools {
      * @return closest valid coordinate.
      */
     public int[] closestValidCoordinate(Vertex[][] vertexMatrix, int[] coord){
-        
         if(vertexMatrix==null) return null;
         if(valid(coord[0], coord[1], vertexMatrix)) return coord;                
         
@@ -178,24 +180,21 @@ public class Tools {
         
 //        System.out.print("Invalid coordinate, finding closest valid coordinate: ");
         
-        Astar A = new Astar(vertexMatrix, newcoord, newcoord, NO_HEURISTIC, true, true);
-        Stack<Vertex> s = A.run();
-        Vertex v = s.pop();
+        AstarJavaDataStructures A = new AstarJavaDataStructures(vertexMatrix, newcoord, newcoord, NO_HEURISTIC, true, true);
+        ArrayDeque<Vertex> list = A.run();
+        Vertex v = list.pop();
         y = v.getY();
         x = v.getX();
         
         //undo any changes
-        Stack<Vertex> utilityStack = A.getUtilityStack();
-        while(!utilityStack.isEmpty()){
-            Vertex vertex = utilityStack.pop();
+        ArrayDeque<Vertex> ulist = A.getUtilityStack();
+        for (Vertex vertex : ulist) {
             vertex.setClosed(false);
             vertex.setOnPath(false);
             vertex.setDistance(-1);
             vertex.setToGoal(-1);
-            vertex.setFx(-1);
             vertex.setOpened(false);
         }
-
 //        System.out.println(" {y: " + y + " x: " + x+ "}");
         return new int[] {y, x};
         

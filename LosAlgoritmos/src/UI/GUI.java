@@ -4,6 +4,7 @@
  */
 package UI;
 
+import Performance.Performance;
 import application.Cartographer;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,8 +13,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import application.LosAlgoritmos;
 import algorithms.Tools;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
 
 /**
  * Graphical User Interface.
@@ -80,8 +80,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         movementCheckBox = new javax.swing.JCheckBox();
         manhattanButton = new javax.swing.JRadioButton();
-        chebyshevButton = new javax.swing.JRadioButton();
         chebyshev1Button = new javax.swing.JRadioButton();
+        chebyshev2Button = new javax.swing.JRadioButton();
         euclideanButton = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -90,7 +90,12 @@ public class GUI extends javax.swing.JFrame {
         jumpComps = new javax.swing.JTextField();
         mapSizePanel = new javax.swing.JPanel();
         mapSizeLabel = new javax.swing.JLabel();
+        randomButton = new javax.swing.JButton();
         mapLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,7 +112,7 @@ public class GUI extends javax.swing.JFrame {
 
         startValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Start x,y"));
 
-        startValField.setText("10,10");
+        startValField.setText("61,365");
         startValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startValFieldActionPerformed(evt);
@@ -133,7 +138,7 @@ public class GUI extends javax.swing.JFrame {
 
         goalValPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Goal x,y"));
 
-        goalValField.setText("35,35");
+        goalValField.setText("348,481");
         goalValField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goalValFieldActionPerformed(evt);
@@ -182,11 +187,11 @@ public class GUI extends javax.swing.JFrame {
         manhattanButton.setSelected(true);
         manhattanButton.setText("Manhattan");
 
-        heuristicButtonGroup.add(chebyshevButton);
-        chebyshevButton.setText("Chebyshev 1");
-
         heuristicButtonGroup.add(chebyshev1Button);
-        chebyshev1Button.setText("Chebyshev 2");
+        chebyshev1Button.setText("Chebyshev sqrt(2)");
+
+        heuristicButtonGroup.add(chebyshev2Button);
+        chebyshev2Button.setText("Chebyshev equal cost");
 
         heuristicButtonGroup.add(euclideanButton);
         euclideanButton.setText("Euclidean");
@@ -227,6 +232,13 @@ public class GUI extends javax.swing.JFrame {
                     .addContainerGap(8, Short.MAX_VALUE)))
         );
 
+        randomButton.setText("Random");
+        randomButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                randomButtonActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout settingsPanelLayout = new org.jdesktop.layout.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
@@ -245,12 +257,14 @@ public class GUI extends javax.swing.JFrame {
                             .add(goalValPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(settingsPanelLayout.createSequentialGroup()
                         .add(8, 8, 8)
-                        .add(movementCheckBox)
+                        .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(movementCheckBox)
+                            .add(randomButton))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(chebyshevButton)
-                            .add(manhattanButton)
                             .add(chebyshev1Button)
+                            .add(manhattanButton)
+                            .add(chebyshev2Button)
                             .add(euclideanButton)))
                     .add(settingsPanelLayout.createSequentialGroup()
                         .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
@@ -315,18 +329,37 @@ public class GUI extends javax.swing.JFrame {
                     .add(manhattanButton)
                     .add(movementCheckBox))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(chebyshevButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(chebyshev1Button)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(chebyshev2Button)
+                    .add(randomButton))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(euclideanButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         mapLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mapLabel.setAlignmentY(0.0F);
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("ToFile");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -406,6 +439,23 @@ public class GUI extends javax.swing.JFrame {
         updateMapWithRoute(true, LosAlgoritmos.JPS, getChosenHeuristic(), true);
     }//GEN-LAST:event_jumpButtonActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            ie.exportImageToFile("exportImage", ie.updateImageWithPathAndComparisons(la.getVertexMatrix(), 2048, 2048));
+        } catch (IOException ex) {
+            
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void randomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randomButtonActionPerformed
+        // TODO add your handling code here:
+        int[] arr = Tools.randomPoint(la.getVertexMatrix());
+        this.startValField.setText(arr[1] + "," + arr[0]);
+        arr = Tools.randomPoint(la.getVertexMatrix());
+        this.goalValField.setText(arr[1] + "," + arr[0]);
+        drawMap();
+    }//GEN-LAST:event_randomButtonActionPerformed
+
     
     /**
      * Returns the right heuristic chosen from heuristicButtonGroup.
@@ -413,8 +463,8 @@ public class GUI extends javax.swing.JFrame {
     public int getChosenHeuristic(){
         int mode;
         if(manhattanButton.isSelected()) mode=LosAlgoritmos.MANHATTAN;
-        else if(chebyshevButton.isSelected()) mode=LosAlgoritmos.DIAGONAL_EQUAL_COST;
         else if(chebyshev1Button.isSelected()) mode=LosAlgoritmos.DIAGONAL;
+        else if(chebyshev2Button.isSelected()) mode=LosAlgoritmos.DIAGONAL_EQUAL_COST;
         else mode=LosAlgoritmos.EUCLIDEAN;  
         return mode;
     }
@@ -501,7 +551,16 @@ public class GUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
+
+        
+        
+        
+//        boolean performance = false;
+        boolean performance = true;
+        if(performance) new Performance().measure();
+        else {
+//[365, 61], [481, 348]
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -532,13 +591,14 @@ public class GUI extends javax.swing.JFrame {
                 new GUI().setVisible(true);
             }
         });
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton astarButton;
     private javax.swing.JTextField astarComps;
     private javax.swing.JTextField astarDist;
     private javax.swing.JRadioButton chebyshev1Button;
-    private javax.swing.JRadioButton chebyshevButton;
+    private javax.swing.JRadioButton chebyshev2Button;
     private javax.swing.JButton dijkstraButton;
     private javax.swing.JTextField dijkstraComps;
     private javax.swing.JTextField dijkstraDist;
@@ -548,6 +608,10 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup heuristicButtonGroup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton jumpButton;
@@ -560,6 +624,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel mapSizeLabel;
     private javax.swing.JPanel mapSizePanel;
     private javax.swing.JCheckBox movementCheckBox;
+    private javax.swing.JButton randomButton;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.JTextField startValField;
     private javax.swing.JPanel startValPanel;

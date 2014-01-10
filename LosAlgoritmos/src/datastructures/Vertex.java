@@ -11,8 +11,9 @@ package datastructures;
 public class Vertex implements Comparable<Vertex>{
     private int x;
     private int y;
-    private double toGoal;
-    private double distance;
+    private double Hx;
+    private double Gx;
+    private double Fx;
     private char key;
     private boolean onPath;
     private boolean closed;
@@ -29,8 +30,9 @@ public class Vertex implements Comparable<Vertex>{
         this.x = x;
         this.y = y;
         this.key = key;
-        this.toGoal = -1;
-        this.distance = -1;
+        this.Hx = -1;
+        this.Gx = -1;
+        this.Fx = -1;
         this.onPath = false;
         this.closed = false;
         this.opened = false;
@@ -67,20 +69,30 @@ public class Vertex implements Comparable<Vertex>{
     }
 
     public double getToGoal() {
-        return toGoal;
+        return Hx;
     }
 
     public void setToGoal(double toGoal) {
-        this.toGoal = toGoal;
+        this.Hx = toGoal;
     }
 
     public double getDistance() {
-        return distance;
+        return Gx;
     }
 
     public void setDistance(double distance) {
-        this.distance = distance;
+        this.Gx = distance;
     }
+
+    public double getFx() {
+        return Fx;
+    }
+
+    public void setFx(double Fx) {
+        this.Fx = Fx;
+    }
+    
+    
 
 
     public int getX() {
@@ -129,8 +141,8 @@ public class Vertex implements Comparable<Vertex>{
         double thatdist;
         if(that==null) return 0;
         
-        thisdist = this.toGoal==-1 ? this.distance : this.distance + this.toGoal;
-        thatdist = that.toGoal==-1 ? that.distance : that.distance + that.toGoal;
+        thisdist = this.Hx==-1 ? this.Gx : this.Gx + this.Hx;
+        thatdist = that.Hx==-1 ? that.Gx : that.Gx + that.Hx;
         
 
         if(thisdist < thatdist){
@@ -140,13 +152,26 @@ public class Vertex implements Comparable<Vertex>{
             return 0;            
         }
         return 1;
+//        if(this.Fx < that.Fx){
+//            return -1;
+//        } 
+//        if(this.Fx == that.Fx){
+//            return 0;            
+//        }
+//        return 1;
         
     }
 
-    @Override
-    public String toString() {
-        return "Vertex{" + "x=" + x + ", y=" + y + ", key=" + key + '}';
-    }
+        @Override
+        public String toString() {
+            return "Vertex{" + "x=" + x + ", y=" + y + ", key=" + key + '}';
+        }
+//    @Override
+//    public String toString() {
+//        return "Vertex{" + "key=" + key + '}';
+//    }
+    
+    
 
  
 
