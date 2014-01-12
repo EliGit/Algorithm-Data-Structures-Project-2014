@@ -11,14 +11,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Tests for VertexMinHeap.
  * @author EliAir
  */
-public class MinHeapTest {
+public class VertexMinHeapTest {
     VertexMinHeap heap;
     Random r;
     
-    public MinHeapTest() {
+    public VertexMinHeapTest() {
     }
     
     @Before

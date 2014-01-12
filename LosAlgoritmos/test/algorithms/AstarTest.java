@@ -48,13 +48,13 @@ public class AstarTest {
     @Test
     public void testConstructor() {
         assertNotNull(A.getMap());
-        assertNotNull(A.getPath());
-        assertNotNull(A.getS());
-        assertNotNull(A.getT());
-        assertEquals(t1[0], A.getS().getY());
-        assertEquals(t1[1], A.getS().getX());
-        assertEquals(t2[0], A.getT().getX());
-        assertEquals(t2[1], A.getT().getX());        
+        
+        assertNotNull(A.getStart());
+        assertNotNull(A.getGoal());
+        assertEquals(t1[0], A.getStart().getY());
+        assertEquals(t1[1], A.getStart().getX());
+        assertEquals(t2[0], A.getGoal().getX());
+        assertEquals(t2[1], A.getGoal().getX());        
     }
     
     /**
@@ -95,7 +95,7 @@ public class AstarTest {
     
     
     
-    public Vertex[][] createVertexMatrix() throws Exception{
+    private Vertex[][] createVertexMatrix() throws Exception{
         char[][] charM = c.toCharMatrix();
         Vertex[][] vertexM = new Vertex[charM.length][charM[0].length];
         for (int i = 0; i < vertexM.length; i++) {

@@ -24,8 +24,8 @@ public class MapListModel extends AbstractListModel{
         int nulls=0;
         for (int i = 0; i < files.length; i++) {
             if(files[i].getName().contains("test")){
-//                files[i]=null;
-//                nulls++;
+                files[i]=null;
+                nulls++;
             }
         }
         list = new File[files.length-nulls];

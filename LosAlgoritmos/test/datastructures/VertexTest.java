@@ -37,7 +37,8 @@ public class VertexTest {
         assertEquals('.', v.getKey());
         assertEquals(-1, v.getDistance(), 0.002);
         assertEquals(-1, v.getToGoal(), 0.002);
-        assertFalse(v.isOnPath());        
+        assertFalse(v.isOnPath());       
+        assertNull(v.getPath());
     }
     
     /**

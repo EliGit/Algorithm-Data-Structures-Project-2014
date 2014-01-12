@@ -13,12 +13,12 @@ public class Vertex implements Comparable<Vertex>{
     private int y;
     private double Hx;
     private double Gx;
-    private double Fx;
     private char key;
-    private int index;
+    private int index; //used by VertexMinHeap to track index, eliminates need for hashmap
     private boolean onPath;
     private boolean closed;
     private boolean opened;
+    private Vertex path;
     
     /**
      * Initializes values.
@@ -34,10 +34,10 @@ public class Vertex implements Comparable<Vertex>{
         this.key = key;
         this.Hx = -1;
         this.Gx = -1;
-        this.Fx = -1;
         this.onPath = false;
         this.closed = false;
         this.opened = false;
+        this.path=null;
     }
 
     public boolean isOnPath() {
@@ -56,9 +56,7 @@ public class Vertex implements Comparable<Vertex>{
     
     
     public boolean equals(Vertex v){
-        if(this.x==v.getX() && this.y==v.getY()){
-            return true;
-        } 
+        if(this.x==v.getX() && this.y==v.getY()) return true;
         return false;
     }
     
@@ -85,17 +83,6 @@ public class Vertex implements Comparable<Vertex>{
     public void setDistance(double distance) {
         this.Gx = distance;
     }
-
-    public double getFx() {
-        return Fx;
-    }
-
-    public void setFx(double Fx) {
-        this.Fx = Fx;
-    }
-    
-    
-
 
     public int getX() {
         return x;
@@ -128,6 +115,15 @@ public class Vertex implements Comparable<Vertex>{
     public void setOpened(boolean opened) {
         this.opened = opened;
     }
+
+    public Vertex getPath() {
+        return path;
+    }
+
+    public void setPath(Vertex path) {
+        this.path = path;
+    }
+    
     
     
 
@@ -153,15 +149,7 @@ public class Vertex implements Comparable<Vertex>{
         if(thisdist == thatdist){
             return 0;            
         }
-        return 1;
-//        if(this.Fx < that.Fx){
-//            return -1;
-//        } 
-//        if(this.Fx == that.Fx){
-//            return 0;            
-//        }
-//        return 1;
-        
+        return 1;        
     }
 
     public int getIndex() {
@@ -171,28 +159,10 @@ public class Vertex implements Comparable<Vertex>{
     public void setIndex(int index) {
         this.index = index;
     }
-    
-    
 
-        @Override
-        public String toString() {
-            return "Vertex{" + "x=" + x + ", y=" + y + ", key=" + key + '}';
-        }
-//    @Override
-//    public String toString() {
-//        return "Vertex{" + "key=" + key + '}';
-//    }
-    
-    
+    @Override
+    public String toString() {
+        return "Vertex{" + "x=" + x + ", y=" + y + ", key=" + key + '}';
+    }
 
- 
-
-    
-
-  
-    
-    
-    
-    
-    
 }

@@ -13,14 +13,13 @@ import java.util.Random;
  * Gathered tools used by routing algorithms, tests and GUI.
  * @author Elias Nygren
  */
+
 public class Tools {
     public final static int NO_HEURISTIC = 0;
     public final static int MANHATTAN = 1;
     public final static int DIAGONAL_EQUAL_COST = 2;
     public final static int DIAGONAL = 3;
     public final static int EUCLIDEAN = 4;
-    
-    
     
      /**
      * Implementations of A*, JPS heuristics.
@@ -48,15 +47,15 @@ public class Tools {
      * @param start The vertex at the start.
      * @return the best route as an ArrayList of vertices.
      */
-    public Stack<Vertex> shortestPath(Vertex[][] path, Vertex goal,  Vertex start){
+    public Stack<Vertex> shortestPath(Vertex goal,  Vertex start){
         Stack<Vertex> pino = new Stack<>();        
         pino.push(goal);
         if(goal.equals(start)) return pino;
-        Vertex u = path[goal.getY()][goal.getX()];
+        Vertex u = goal.getPath();
         while(!u.equals(start)){     
             u.setOnPath(true);
             pino.push(u);
-            u = path[u.getY()][u.getX()];
+            u = u.getPath();
         }         
         pino.push(u);
         start.setOnPath(true);
@@ -114,12 +113,15 @@ public class Tools {
         else if(c=='7'){ ++i; } //down
         else if(c=='8'){ ++i; --j;} 
 
-        //easy, lazy way to check if within bounds of the matrix
-        try{ 
-            return map[u.getY()+i][u.getX()+j];
-        } catch (ArrayIndexOutOfBoundsException e){ 
+        int x = u.getX()+j;
+        int y = u.getY()+i;
+        
+        //check if within bounds of the matrix
+        if(x<0 || y < 0 ||x>=map[0].length || y>=map.length){
             return null;
-        }        
+        } else {
+            return map[y][x];
+        }   
     }
     
     
@@ -137,8 +139,6 @@ public class Tools {
         if(map[y][x].getKey()=='.') return true;
         return false;
     }
-    
-    
     
     
     /**
@@ -189,8 +189,8 @@ public class Tools {
             vertex.setOnPath(false);
             vertex.setDistance(-1);
             vertex.setToGoal(-1);
-            vertex.setFx(-1);
             vertex.setOpened(false);
+            vertex.setPath(null);
         }
 
         return new int[] {y, x};

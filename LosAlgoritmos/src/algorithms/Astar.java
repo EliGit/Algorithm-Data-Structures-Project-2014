@@ -14,11 +14,10 @@ import datastructures.Vertex;
  * @author Elias Nygren
  */
 public class Astar implements Algo{
-    private Vertex[][] path;
     private VertexMinHeap heap;
     private Vertex[][] map;
-    private Vertex s;
-    private Vertex t;
+    private Vertex start;
+    private Vertex goal;
     private String directions;
     private int heuristics;
     
@@ -38,14 +37,13 @@ public class Astar implements Algo{
     public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
         Tools = new Tools();
         this.map = map;
-        this.path = new Vertex[map.length][map[0].length];
         this.heap = new VertexMinHeap(map.length*map[0].length);
-        this.s = map[start[0]][start[1]];
-        this.t = map[goal[0]][goal[1]];
+        this.start = map[start[0]][start[1]];
+        this.goal = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
         
-        s.setOnPath(true);
-        t.setOnPath(true);
+        this.start.setOnPath(true);
+        this.goal.setOnPath(true);
         
         if(diagonalMovement) directions = "12345678";
         else directions = "1357";
@@ -67,26 +65,25 @@ public class Astar implements Algo{
         this(map, start, goal, heuristics, diagonalMovement);
         this.utilitymode=utilitymode;
         this.utilityStack = new Stack<>();
-        this.utilityStack.push(s);
-        this.utilityStack.push(t);
+        this.utilityStack.push(this.start);
+        this.utilityStack.push(this.goal);
     }
     
     /**
      * Runs the Astar algorithm with the provided map, starting point and the goal.
      * Saves all information to the Vertex objects on the map.
-     * @return the best route as an ArrayList of vertices.
+     * @return the best route.
      */
     
     @Override
     public Stack<Vertex> run() {
         
         //INIT
-        s.setDistance(0);        
-        heap.add(s);     
-        s.setOpened(true);
+        start.setDistance(0);        
+        heap.add(start);     
+        start.setOpened(true);
         Vertex vertex;
         Queue<Vertex> ngbrs;
-        
         
         //ALGO
         while(!heap.isEmpty()){
@@ -105,7 +102,7 @@ public class Astar implements Algo{
             //no utilitymode-> proceed normally
             else {
                 //if v == target, stop algo, find the route from path matrix
-                if(vertex.equals(t)) return Tools.shortestPath(path, t, s);
+                if(vertex.equals(goal)) return Tools.shortestPath(goal, start);
             }
 
             //for all neighbours
@@ -131,9 +128,9 @@ public class Astar implements Algo{
                     ngbr.setDistance(distance);
                     
                     //use appropriate heuristic if necessary (-1 is the default value of distance to goal, so heuristic not used if still -1)
-                    if(ngbr.getToGoal() == -1) ngbr.setToGoal(Tools.heuristics(ngbr.getY(), ngbr.getX(), this.heuristics, t));              
+                    if(ngbr.getToGoal() == -1) ngbr.setToGoal(Tools.heuristics(ngbr.getY(), ngbr.getX(), this.heuristics, goal));              
 
-                    path[ngbr.getY()][ngbr.getX()]=vertex;        
+                    ngbr.setPath(vertex);
                     
                     //if vertex was not yet opened, open it and place to heap. Else update its position in heap.
                     if(!ngbr.isOpened()){
@@ -151,22 +148,28 @@ public class Astar implements Algo{
     
 
     
-    //getters for testing:
+    /**
+     * For testing
+     * @return map
+     */
     public Vertex[][] getMap() {
         return map;
     }
 
-    public Vertex[][] getPath() {
-        return path;
+    /**
+     * For testing
+     * @return start
+     */
+    public Vertex getStart() {
+        return start;
     }
-
-
-    public Vertex getS() {
-        return s;
-    }
-
-    public Vertex getT() {
-        return t;
+    
+    /**
+     * For testing
+     * @return goal
+     */
+    public Vertex getGoal() {
+        return goal;
     }
 
     /**

@@ -16,7 +16,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Jump Point Search tests.
  * @author EliAir
  */
 public class JPSTest {
@@ -131,7 +131,7 @@ public class JPSTest {
         jps = new JPS(createVertexMatrix(), t1, t2, Tools.EUCLIDEAN, true);
         s = jps.getMap()[t1[0]][t1[1]];
         g = jps.getMap()[t2[0]][t2[1]];
-        jps.getPath()[t2[0]][t2[1]]=jps.getMap()[t1[0]][t1[1]];
+        jps.getMap()[t2[0]][t2[1]].setPath(jps.getMap()[t1[0]][t1[1]]);
     }
     
     /**
@@ -139,7 +139,7 @@ public class JPSTest {
      * @return
      * @throws Exception 
      */
-    public Vertex[][] createVertexMatrix() throws Exception{
+    private Vertex[][] createVertexMatrix() throws Exception{
         char[][] charM = c.toCharMatrix();
         Vertex[][] vertexM = new Vertex[charM.length][charM[0].length];
         for (int i = 0; i < vertexM.length; i++) {

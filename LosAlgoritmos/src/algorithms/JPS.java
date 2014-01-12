@@ -15,11 +15,10 @@ import datastructures.Vertex;
  * @author Elias Nygren
  */
 public class JPS implements Algo{    
-    private Vertex[][] path;
     private VertexMinHeap heap;
     private Vertex[][] map;
-    private Vertex s;
-    private Vertex t;
+    private Vertex start;
+    private Vertex goal;
     private String directions;
     private int heuristics;
     private Tools Tools;
@@ -28,14 +27,13 @@ public class JPS implements Algo{
     public JPS(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement){
         Tools = new Tools();
         this.map = map;
-        this.path = new Vertex[map.length][map[0].length];
         this.heap = new VertexMinHeap(map.length*map[0].length);
-        this.s = map[start[0]][start[1]];
-        this.t = map[goal[0]][goal[1]];
+        this.start = map[start[0]][start[1]];
+        this.goal = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
         
-        s.setOnPath(true);
-        t.setOnPath(true);
+        this.start.setOnPath(true);
+        this.goal.setOnPath(true);
         
         directions = "12345678";
     }
@@ -43,9 +41,9 @@ public class JPS implements Algo{
     @Override
     public Stack<Vertex> run() {
         //INIT
-        s.setDistance(0);        
-        heap.add(s);        
-        s.setOpened(true);        
+        start.setDistance(0);        
+        heap.add(start);        
+        start.setOpened(true);        
         Vertex vertex;
         Queue<Vertex> ngbrs;
         
@@ -56,7 +54,7 @@ public class JPS implements Algo{
             //vertex is closed when the algorithm has dealt with it
             vertex.setClosed(true);            
             //if v == target, stop algo, find the route from path matrix
-            if(vertex.equals(t)) return Tools.shortestPath(path, t, s);
+            if(vertex.equals(goal)) return Tools.shortestPath(goal, start);
             
 
             //IDENTIFY SUCCESSORS:
@@ -83,9 +81,9 @@ public class JPS implements Algo{
                         jumpPoint.setDistance(distance);
                         
                         //use appropriate heuristic if necessary (-1 is the default value of distance to goal, so heuristic not used if still -1)
-                        if(jumpPoint.getToGoal() == -1) jumpPoint.setToGoal(Tools.heuristics(jumpPoint.getY(), jumpPoint.getX(), this.heuristics, t));                    
+                        if(jumpPoint.getToGoal() == -1) jumpPoint.setToGoal(Tools.heuristics(jumpPoint.getY(), jumpPoint.getX(), this.heuristics, goal));                    
                         
-                        path[jumpPoint.getY()][jumpPoint.getX()]=vertex;
+                        jumpPoint.setPath(vertex);
 
                         //if vertex was not yet opened, open it and place to heap. Else update its position in heap.
                         if(!jumpPoint.isOpened()){                            
@@ -116,7 +114,7 @@ public class JPS implements Algo{
             return null;
         }    
                 
-        if(map[y][x].equals(t)) {
+        if(map[y][x].equals(goal)) {
             return new int[] {x, y};
         }
         
@@ -170,7 +168,7 @@ public class JPS implements Algo{
     */    
     public Queue<Vertex> getNeighbors(Vertex u){
         Queue<Vertex> ngbrs = new Queue<>();
-        Vertex parent = path[u.getY()][u.getX()];
+        Vertex parent = u.getPath();
         
         if(parent!=null){             
             //get direction of movement
@@ -253,21 +251,28 @@ public class JPS implements Algo{
     
     
     
-    //getters for testing:
+     /**
+     * For testing
+     * @return map
+     */
     public Vertex[][] getMap() {
         return map;
     }
 
-    public Vertex[][] getPath() {
-        return path;
+
+     /**
+     * For testing
+     * @return start
+     */
+    public Vertex getStart() {
+        return start;
     }
-
-
-    public Vertex getS() {
-        return s;
-    }
-
-    public Vertex getT() {
-        return t;
+    
+     /**
+     * For testing
+     * @return goal
+     */
+    public Vertex getGoal() {
+        return goal;
     }
 }

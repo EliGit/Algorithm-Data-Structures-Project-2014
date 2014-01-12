@@ -422,7 +422,7 @@ public class GUI extends javax.swing.JFrame {
      * @param evt 
      */
     private void dijkstraButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkstraButtonActionPerformed
-        updateMapWithRoute(true, LosAlgoritmos.DIJKSTRA,LosAlgoritmos.NO_HEURISTIC, movementCheckBox.isSelected());
+        updateMapWithRoute(LosAlgoritmos.DIJKSTRA,LosAlgoritmos.NO_HEURISTIC, movementCheckBox.isSelected());
     }//GEN-LAST:event_dijkstraButtonActionPerformed
     
     /**
@@ -432,11 +432,11 @@ public class GUI extends javax.swing.JFrame {
      * @param evt 
      */
     private void astarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_astarButtonActionPerformed
-        updateMapWithRoute(true, LosAlgoritmos.ASTAR, getChosenHeuristic(), movementCheckBox.isSelected());
+        updateMapWithRoute(LosAlgoritmos.ASTAR, getChosenHeuristic(), movementCheckBox.isSelected());
     }//GEN-LAST:event_astarButtonActionPerformed
 
     private void jumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumpButtonActionPerformed
-        updateMapWithRoute(true, LosAlgoritmos.JPS, getChosenHeuristic(), true);
+        updateMapWithRoute(LosAlgoritmos.JPS, getChosenHeuristic(), true);
     }//GEN-LAST:event_jumpButtonActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -489,6 +489,7 @@ public class GUI extends javax.swing.JFrame {
         } catch (Exception ex) {
 //            System.out.println(ex);
         }               
+        
         int width = charMatrix[0].length;
         int height = charMatrix.length;
         mapSizeLabel.setText(""+width+"x"+height);
@@ -513,9 +514,13 @@ public class GUI extends javax.swing.JFrame {
      * Runs the routing algorithm and updates the current map with the best updateMapWithRoute.
      * Uses LosAlgoritmos class for routing and ImageBuilder to updateImageWithPath the graphical
      * representation of the map.
+     *
+     * @param algo LosAlgoritmos.ALGONAME
+     * @param heuristics LosAlgoritmos.HEURISTICNAME
+     * @param diagonalMovement true -> allow diagonal
      */
     
-    public void updateMapWithRoute(boolean comparisons, int algo, int heuristics, boolean diagonalMovement){
+    public void updateMapWithRoute(int algo, int heuristics, boolean diagonalMovement){
         try {
             la.route(start, goal, algo, heuristics, diagonalMovement);
         } catch (Exception ex) {
@@ -543,8 +548,7 @@ public class GUI extends javax.swing.JFrame {
         
                 
         BufferedImage buff;
-        if(comparisons) buff=ie.updateImageWithPathAndComparisons(la.getVertexMatrix(), MAPWIDTH, MAPHEIGHT);
-        else buff=ie.updateImageWithPath(la.getBestroute(), MAPWIDTH, MAPHEIGHT);
+        buff=ie.updateImageWithPathAndComparisons(la.getVertexMatrix(), MAPWIDTH, MAPHEIGHT);
         mapLabel.setIcon(new ImageIcon(buff));
     }
     
@@ -552,15 +556,12 @@ public class GUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
-
-        
-        
         //FALSE -> GUI (normal), TRUE -> performance testing (very beta, was used for coursework reporting data)
-        boolean performance = false;        
-//        boolean performance = true;        
+//        boolean performance = false;        
+        boolean performance = true;        
         if(performance) new Performance().measure();
         else {
-//[365, 61], [481, 348]
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

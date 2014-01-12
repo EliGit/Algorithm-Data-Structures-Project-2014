@@ -12,8 +12,7 @@ import datastructures.Vertex;
 
 /**
  * Functionality for managing the different routing algorithms.
- * The routing algorithms save all necessary information to the VertexMatrix,
- * each vertex knows if it is on the shortest path and what was the distance to it.
+ * The routing algorithms save all necessary information to the vertices on the VertexMatrix (the map)
  * @author Elias Nygren
  */
 public class LosAlgoritmos {
@@ -129,45 +128,15 @@ public class LosAlgoritmos {
  
     
 
-
+    /**
+     * Get currently loaded vertex matrix (map).
+     * @return vertexMatrix.
+     */
     public Vertex[][] getVertexMatrix() {
         return vertexMatrix;
     }
 
-    public int[] getStart() {
-        return start;
-    }
-
-    public int[] getGoal() {
-        return goal;
-    }
     
-    public Stack<Vertex> getBestroute() {
-        return bestroute;
-    }    
-    
-
-    
-    
-    
-    /**
-     * Prints the map as chars and the found route (all vertices with .isOnPath == true) as distance values to the console.
-     * For debugging.
-     */
-    public void printRouteDistances(){     
-        System.out.println("");
-        for (int i = 0; i < vertexMatrix.length; i++) {
-            for (int j = 0; j < vertexMatrix[0].length; j++) {
-                Vertex v = vertexMatrix[i][j];
-                if(v.isOnPath()){
-                    System.out.print(v.getDistance() + "");
-                } else {
-                    System.out.print(v.getKey());
-                }
-            }
-            System.out.println("");
-        }
-    }
     
     /**
      * Prints the map as the distance values of the vertices to the console.
@@ -194,7 +163,10 @@ public class LosAlgoritmos {
         }
     }
     
-    
+    /**
+     * Prints the map as the toGoal values of the vertices to the console.
+     * For debugging.
+     */
     public void printAllToGoals(){        
         System.out.println("");
         for (int i = 0; i < vertexMatrix.length; i++) {

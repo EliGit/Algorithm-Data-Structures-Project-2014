@@ -12,13 +12,12 @@ import datastructures.Vertex;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Tools tests.
  * @author EliAir
  */
 public class ToolsTest {
@@ -38,9 +37,6 @@ public class ToolsTest {
         Tools = new Tools();
     }
     
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Heuristics return correct values.
@@ -140,14 +136,14 @@ public class ToolsTest {
     @Test
     public void shortestRoute() throws Exception{
         customSetup();
-        Vertex[][] path = new Vertex[map.length][map[0].length];
-        path[2][2]=map[2][1];
-        path[2][1]=map[1][1];
-        path[1][1]=map[0][1];
-        path[0][1]=map[0][0];
+        
+        map[2][2].setPath(map[2][1]);
+        map[2][1].setPath(map[1][1]);
+        map[1][1].setPath(map[0][1]);
+        map[0][1].setPath(map[0][0]);
         
         Stack s;
-        s = Tools.shortestPath(path, map[2][2], map[0][0]);
+        s = Tools.shortestPath(map[2][2], map[0][0]);
         
         assertTrue(s.contains(map[2][2]));
         assertTrue(s.contains(map[2][1]));
@@ -183,6 +179,10 @@ public class ToolsTest {
         }
     }
     
+    /**
+     * Running closest valid must not change the state of the map.
+     * @throws Exception 
+     */
     @Test
     public void closestValidUndoesChanges() throws Exception{
         la = new LosAlgoritmos();
@@ -203,14 +203,13 @@ public class ToolsTest {
                 assertFalse(v.isClosed());
                 assertFalse(v.isOnPath());
                 assertFalse(v.isOpened());
-                assertEquals(-1, v.getFx(), 0.002);
                 assertEquals(-1, v.getDistance(), 0.002);
                 assertEquals(-1, v.getToGoal(), 0.002);
             }
         
     }
     
-    public void customSetup() throws Exception{
+    private void customSetup() throws Exception{
         c = new Cartographer(new File("./maps/test4.map"));
         la = new LosAlgoritmos();
         la.loadCharMatrix(c.toCharMatrix());

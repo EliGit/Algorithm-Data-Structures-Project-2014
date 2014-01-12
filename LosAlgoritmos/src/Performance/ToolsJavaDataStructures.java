@@ -4,15 +4,15 @@
  */
 package Performance;
 
-import application.LosAlgoritmos;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import datastructures.Vertex;
 import java.util.Random;
 
+
 /**
- *
- * @author EliAir
+ * Gathered tools used by routing algorithms, tests and GUI.
+ * With Java built in data structures.
+ * @author Elias Nygren
  */
 public class ToolsJavaDataStructures {
     public final static int NO_HEURISTIC = 0;
@@ -21,12 +21,9 @@ public class ToolsJavaDataStructures {
     public final static int DIAGONAL = 3;
     public final static int EUCLIDEAN = 4;
     
-    
-    
      /**
      * Implementations of A* heuristics.
      * When Dijkstra (no heuristics) selected, returns -1
-     * 
      * @param y y coordinate of current vertex
      * @param x x coordinate of current vertex
      * @param heuristic selected heuristic
@@ -50,21 +47,19 @@ public class ToolsJavaDataStructures {
      * @param start The vertex at the start.
      * @return the best route as an ArrayList of vertices.
      */
-    public ArrayDeque<Vertex> shortestPath(Vertex[][] path, Vertex goal,  Vertex start){
+    public ArrayDeque<Vertex> shortestPath(Vertex goal,  Vertex start){
         ArrayDeque<Vertex> pino = new ArrayDeque<>();
-        
         pino.push(goal);
-        
         if(goal.equals(start)) return pino;
-        
-        Vertex u = path[goal.getY()][goal.getX()];
-        while(!u.equals(start)){   
+        Vertex u = goal.getPath();
+        while(!u.equals(start)){     
             u.setOnPath(true);
             pino.push(u);
-            u = path[u.getY()][u.getX()];
+            u = u.getPath();
         }         
         pino.push(u);
-        start.setOnPath(true);        
+        start.setOnPath(true);
+
         return pino;
     }
     
@@ -75,7 +70,7 @@ public class ToolsJavaDataStructures {
      * @return a list of the neighbors
      */
     public ArrayDeque<Vertex> getNeighbors(Vertex[][] map, Vertex u, String directions){
-        ArrayDeque<Vertex> ngbrs = new ArrayDeque<Vertex>();
+        ArrayDeque<Vertex> ngbrs = new ArrayDeque<>();
         for(char c : directions.toCharArray()){
             Vertex v = getNeighbor(map, u, c);    
             //if v valid (within the map)
@@ -93,7 +88,7 @@ public class ToolsJavaDataStructures {
      */
     
     public ArrayDeque<Vertex> getAllNeighbors(Vertex[][] map, Vertex u){
-        ArrayDeque<Vertex> ngbrs = new ArrayDeque<Vertex>();
+        ArrayDeque<Vertex> ngbrs = new ArrayDeque<>();
         for(char c : "12345678".toCharArray()){
             Vertex v = getNeighbor(map, u, c);   
             if(v!=null) ngbrs.add(v);
@@ -118,12 +113,15 @@ public class ToolsJavaDataStructures {
         else if(c=='7'){ ++i; } //down
         else if(c=='8'){ ++i; --j;} 
 
-        //easy, lazy way to check if within bounds of the matrix
-        try{ 
-            return map[u.getY()+i][u.getX()+j];
-        } catch (ArrayIndexOutOfBoundsException e){ 
+        int x = u.getX()+j;
+        int y = u.getY()+i;
+        
+        //check if within bounds of the matrix
+        if(x<0 || y < 0 ||x>=map[0].length || y>=map.length){
             return null;
-        }        
+        } else {
+            return map[y][x];
+        }       
     }
     
     
@@ -152,7 +150,6 @@ public class ToolsJavaDataStructures {
         Random r = new Random();
         int x = r.nextInt(map[0].length);
         int y = r.nextInt(map.length);
-//        LosAlgoritmos la = new LosAlgoritmos();
         return closestValidCoordinate(map, new int[] {y,x});
     }
     
@@ -163,39 +160,38 @@ public class ToolsJavaDataStructures {
      * @param coord coordinate to be validated.
      * @return closest valid coordinate.
      */
-    public int[] closestValidCoordinate(Vertex[][] vertexMatrix, int[] coord){
+    public int[] closestValidCoordinate(Vertex[][] vertexMatrix, int[] coord){        
         if(vertexMatrix==null) return null;
         if(valid(coord[0], coord[1], vertexMatrix)) return coord;                
         
         int y = coord[0];
         int x = coord[1];
         
-        
+        //move coordinate inside the map
         if(y<0) y=0;
         if(y>=vertexMatrix.length) y=vertexMatrix.length-1;
         if(x<0) x=0;
         if(x>=vertexMatrix[0].length) x=vertexMatrix[0].length-1;
         int[] newcoord = new int[] {y,x};
-//        System.out.println(Arrays.toString(newcoord));
         
-//        System.out.print("Invalid coordinate, finding closest valid coordinate: ");
-        
+        //dijkstra
         AstarJavaDataStructures A = new AstarJavaDataStructures(vertexMatrix, newcoord, newcoord, NO_HEURISTIC, true, true);
-        ArrayDeque<Vertex> list = A.run();
-        Vertex v = list.pop();
+        ArrayDeque<Vertex> s = A.run();
+        Vertex v = s.pop();
         y = v.getY();
         x = v.getX();
         
-        //undo any changes
-        ArrayDeque<Vertex> ulist = A.getUtilityStack();
-        for (Vertex vertex : ulist) {
+        //undo any changes made by dijkstra
+        ArrayDeque<Vertex> utilityStack = A.getUtilityStack();
+        while(!utilityStack.isEmpty()){
+            Vertex vertex = utilityStack.pop();
             vertex.setClosed(false);
             vertex.setOnPath(false);
             vertex.setDistance(-1);
             vertex.setToGoal(-1);
             vertex.setOpened(false);
         }
-//        System.out.println(" {y: " + y + " x: " + x+ "}");
+
         return new int[] {y, x};
         
     }

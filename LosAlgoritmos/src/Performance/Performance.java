@@ -12,18 +12,14 @@ import application.Cartographer;
 import application.LosAlgoritmos;
 import datastructures.Vertex;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- *
- * @author EliAir
+ * Performance testing.
+ * @author Elias Nygren
  */
-public class Performance {
-    private final static double EPSILON = 0.5;
-    
+public class Performance {    
     private Tools Tools;
     private LosAlgoritmos la;
     private Cartographer c;
@@ -35,7 +31,10 @@ public class Performance {
     private int[] t2;
     
     
-    
+    /**
+     * Initialization.
+     * @throws Exception 
+     */
     public Performance() throws Exception{
         la = new LosAlgoritmos();
 //        c = new Cartographer(new File("./maps/combat.map"));
@@ -44,14 +43,17 @@ public class Performance {
         charM = c.toCharMatrix();        
     }
     
+    /**
+     * Compare Dijkstra, A* and JPS  or measure all algorithms with self-made and built-in data structures.
+     */
     public void measure(){
         Scanner s = new Scanner(System.in);
         System.out.println("Measure or Compare? M/C");
         String in = s.nextLine();
         
-        int heuristic = LosAlgoritmos.EUCLIDEAN;
+        int heuristic = LosAlgoritmos.DIAGONAL;
         
-        if(in.isEmpty()){
+        if(in.equals("M")){
             System.out.println("Hit enter to measure.");
             while(true){
                 prep();
@@ -64,14 +66,14 @@ public class Performance {
                 } else break;
             }
         }        
-        if(!in.isEmpty()){
+        if(in.equals("C")){
             System.out.println("How many ? ");
             in = s.nextLine();
             int howmany = Integer.parseInt(in);
             int i =0;
             while(i<howmany){
                 prep();      
-                System.out.println(Arrays.toString(t1) + ", " + Arrays.toString(t2));
+//                System.out.println(Arrays.toString(t1) + ", " + Arrays.toString(t2));
                 System.out.println("D EN   , " + algo(LosAlgoritmos.DIJKSTRA, 0) + ",    " + map[t2[0]][t2[1]].getDistance());   
                 System.out.println("D JAVA , " + algoJava(LosAlgoritmos.DIJKSTRA, 0) + ",    " + map[t2[0]][t2[1]].getDistance());   
     //                    System.out.println("");
@@ -90,6 +92,9 @@ public class Performance {
         
     }
     
+    /**
+     * Return two different, valid coordinates.
+     */
     private void prep(){
         la.loadCharMatrix(charM);
         map = la.getVertexMatrix();
@@ -101,19 +106,19 @@ public class Performance {
         
     }
     
+    /**
+     * Measure performance of specified algo & heuristic.
+     * @param algo
+     * @param heuristic
+     * @return duration
+     */
     public long algo(int algo, int heuristic){        
         la.loadCharMatrix(charM);
         map = la.getVertexMatrix();
         
         Algo A = null;        
-        if(algo==LosAlgoritmos.DIJKSTRA) {
-            A = new Astar(map, t1, t2, LosAlgoritmos.NO_HEURISTIC, true);
-//            System.out.println("D");
-        }
-        else if(algo==LosAlgoritmos.ASTAR) {
-            A = new Astar(map, t1, t2, heuristic, true);
-//            System.out.println("A");
-        }
+        if(algo==LosAlgoritmos.DIJKSTRA) A = new Astar(map, t1, t2, LosAlgoritmos.NO_HEURISTIC, true);
+        else if(algo==LosAlgoritmos.ASTAR) A = new Astar(map, t1, t2, heuristic, true);
         else if(algo==LosAlgoritmos.JPS) A = new JPS(map, t1, t2, heuristic, true);
         
         long startTime = System.nanoTime();
@@ -124,6 +129,12 @@ public class Performance {
         return duration;
     }
     
+    /**
+     * Measure performance of specified algo & heuristic using Java built in data structures.
+     * @param algo
+     * @param heuristic
+     * @return duration
+     */
     public long algoJava(int algo, int heuristic){
         la.loadCharMatrix(charM);
         map = la.getVertexMatrix();

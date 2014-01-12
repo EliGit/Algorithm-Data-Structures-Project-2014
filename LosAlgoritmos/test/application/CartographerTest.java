@@ -5,16 +5,13 @@
 package application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Tests for Cartographer.
  * @author EliAir
  */
 public class CartographerTest {
@@ -23,13 +20,7 @@ public class CartographerTest {
     private File f2;    
     private File f3;
     private File f4;    
-    //contents of f1:
-//    private static char[][] testCharArr1= {{'T','T'},
-//                                            {'@','@'}};
-    //conents of f2:
-//    private static char[][] testCharArr2= {{'@','@'},
-//                                            {'T','T'}};
-    
+
     public CartographerTest() {
     }
     
@@ -45,6 +36,9 @@ public class CartographerTest {
     public void tearDown() {
     }
 
+    /**
+     * Constructor exception when file not found.
+     */
     @Test
     public void constructorThrowsExceptionCorrectly() {        
         try {
@@ -61,6 +55,9 @@ public class CartographerTest {
         }        
     }
     
+    /**
+     * LoadMap throws exception with invalid file.
+     */
     @Test
     public void loadMapThrowsExceptionCorrectly() {
         try{
@@ -72,6 +69,9 @@ public class CartographerTest {
         }                
     }
     
+    /**
+     * toCharMatrix throws exception with invalid file.
+     */
     @Test
     public void toCharMatrixThrowsExceptionCorrectly(){
         try{
@@ -83,6 +83,9 @@ public class CartographerTest {
         }
     }
     
+    /**
+     * To charMatrix creates the char matrix correctly.
+     */
     @Test
     public void toCharMatrixWorksCorrectly(){
         try {

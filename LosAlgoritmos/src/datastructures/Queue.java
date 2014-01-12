@@ -15,12 +15,19 @@ public class Queue<E> {
     private int head;
     private int tail;
     
+    /**
+     * Init with default size (9).
+     */
     public Queue(){
         data = new Object[DEFAULT_SIZE];      
         head=0;
         tail=0;
     }
     
+    /**
+     * Initialize Queue with given size.
+     * @param size 
+     */
     public Queue(int size){
         data = new Object[size];
         head=0;

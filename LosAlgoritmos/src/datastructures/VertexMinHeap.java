@@ -6,6 +6,8 @@ import java.util.Arrays;
 /**
  * Binary VertexMinHeap implementation.
  * Uses an array as the underlying data structure.
+ * Supports only vertices as the heap uses vertex.index to track index in 
+ * heap which necessary for update operation.
  * @author Elias Nygren
  */
 public class VertexMinHeap {
@@ -30,7 +32,7 @@ public class VertexMinHeap {
 
     /**
      * Insert value i to the heap.
-     * @param v value to be added.
+     * @param v Vertex to be added.
      */
     public void add(Vertex v) {
         heapSize++;

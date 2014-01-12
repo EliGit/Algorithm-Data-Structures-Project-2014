@@ -42,8 +42,8 @@ public class CorrectPathsTest {
     
     
     /**
-     * Compares the results of all routing algorithms using the same heuristic.
-     * Uses EPSILON in comparing the double values. 50 tests per each heuristic.
+     * Compares the results of all routing algorithms with diagonal allowed.
+     * Uses EPSILON in comparing the double values. 
      * Manhattan is not tested as it is not consistent when diagonal is allowed.
      * @throws Exception 
      */
