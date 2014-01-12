@@ -557,8 +557,8 @@ public class GUI extends javax.swing.JFrame {
      */
     public static void main(String args[]) throws Exception {
         //FALSE -> GUI (normal), TRUE -> performance testing (very beta, was used for coursework reporting data)
-//        boolean performance = false;        
-        boolean performance = true;        
+        boolean performance = false;        
+//        boolean performance = true;        
         if(performance) new Performance().measure();
         else {
 

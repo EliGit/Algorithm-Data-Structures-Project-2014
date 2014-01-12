@@ -87,7 +87,6 @@ public class VertexMinHeap {
     public void update(Vertex v){                
         int index = v.getIndex();
         
-
         while (hasParent(index) && heap[index].compareTo(heap[parent(index)]) == -1) {
             swap(index, parent(index));
             index = parent(index);
