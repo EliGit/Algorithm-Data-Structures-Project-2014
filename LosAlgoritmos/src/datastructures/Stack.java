@@ -10,7 +10,7 @@ import java.util.Arrays;
  * Lightweight standard stack datastructure implementation with array.
  * Array size is doubled during the push operation if needed.
  * Thus, push is amortized O(1) while worst case is O(n).
- * @author EliAir
+ * @author Elias Nygren
  */
 public class Stack<E> {
     private int stackSize;

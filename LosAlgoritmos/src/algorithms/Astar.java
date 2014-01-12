@@ -4,22 +4,18 @@
  */
 package algorithms;
 
-import datastructures.MinHeap;
+import datastructures.VertexMinHeap;
 import datastructures.Queue;
 import datastructures.Stack;
 import datastructures.Vertex;
-import java.util.ArrayList;
 
 /**
  * Implementation of the A* algorithm with self-made data structures.
- * @author EliAir
+ * @author Elias Nygren
  */
 public class Astar implements Algo{
-
-    
-
     private Vertex[][] path;
-    private MinHeap<Vertex> heap;
+    private VertexMinHeap heap;
     private Vertex[][] map;
     private Vertex s;
     private Vertex t;
@@ -32,10 +28,10 @@ public class Astar implements Algo{
     
     /**
      * Initializes the Astar so it is ready to run.
-     * @param map The charmatrix representation of the map used by this routing algorithm
+     * @param map The vertex matrix representation of the map used by this routing algorithm
      * @param start The starting point of the route, supplied in {y, x} format coordinate array
      * @param goal The end point of the route, supplied in {y, x} format coordinate array
-     * @param heuristics desired heuristic
+     * @param heuristics desired heuristic, LosAlgoritmos.HEURISTICNAME
      * @param diagonalMovement true -> diagonalMovement is allowed, false -> denied
      */
     
@@ -43,12 +39,10 @@ public class Astar implements Algo{
         Tools = new Tools();
         this.map = map;
         this.path = new Vertex[map.length][map[0].length];
-        this.heap = new MinHeap<Vertex>(Vertex.class, map.length*map[0].length);
+        this.heap = new VertexMinHeap(map.length*map[0].length);
         this.s = map[start[0]][start[1]];
         this.t = map[goal[0]][goal[1]];
         this.heuristics=heuristics;
-        
-        
         
         s.setOnPath(true);
         t.setOnPath(true);
@@ -57,6 +51,17 @@ public class Astar implements Algo{
         else directions = "1357";
         
     }
+    
+    /**
+     * Initializes the Astar in utilitymode, which finds the closest walkable vertex with Dijkstra.
+     * Uses utilityStack to store changed vertices so their state can be reset.
+     * @param map The vertex matrix representation of the map used by this routing algorithm
+     * @param start The starting point of the route, supplied in {y, x} format coordinate array
+     * @param goal The end point of the route, supplied in {y, x} format coordinate array
+     * @param heuristics desired heuristic, LosAlgoritmos.HEURISTICNAME
+     * @param diagonalMovement true -> diagonalMovement is allowed, false -> denied
+     * @param utilitymode true -> utilitymode ON.
+     */
     
     public Astar(Vertex[][] map, int[] start, int[] goal, int heuristics, boolean diagonalMovement, boolean utilitymode){        
         this(map, start, goal, heuristics, diagonalMovement);
@@ -72,16 +77,18 @@ public class Astar implements Algo{
      * @return the best route as an ArrayList of vertices.
      */
     
+    @Override
     public Stack<Vertex> run() {
         
-        //init
+        //INIT
         s.setDistance(0);        
         heap.add(s);     
         s.setOpened(true);
-        
         Vertex vertex;
         Queue<Vertex> ngbrs;
         
+        
+        //ALGO
         while(!heap.isEmpty()){
             vertex = heap.poll();
             //vertex is closed when the algorithm has dealt with it
@@ -90,7 +97,7 @@ public class Astar implements Algo{
             //utilitymode used by LosAlgoritmos.closestValidCoordinate
             if(utilitymode){
                 if(Tools.valid(vertex.getY(), vertex.getX(), map)){                    
-                    Stack<Vertex> s = new Stack<Vertex>();
+                    Stack<Vertex> s = new Stack<>();
                     s.push(vertex);                    
                     return s;
                 }                
@@ -111,21 +118,22 @@ public class Astar implements Algo{
                 }
                 ngbrs = Tools.getAllNeighbors(map, vertex);
             }
-//            for(Vertex ngbr : ngbrs){
+
             while(!ngbrs.isEmpty()){
                 Vertex ngbr = ngbrs.deQ();
                 //no need to process a vertex that has already been dealt with
                 if(ngbr.isClosed()) continue;
                 //distance == sqrt(2) if diagonal movement to neighbour, else 1
                 double distance = vertex.getDistance() + ((ngbr.getX() - vertex.getX() == 0 || ngbr.getY() - vertex.getY() == 0) ? 1 : Math.sqrt(2));                
+                
                 //relax IF vertex is not opened (not placed to heap yet) OR shorter distance to it has been found
                 if(!ngbr.isOpened() || ngbr.getDistance()>distance){
                     ngbr.setDistance(distance);
-                    //use appropriate heuristic if necessary, -1 is the default value of distance to goal
+                    
+                    //use appropriate heuristic if necessary (-1 is the default value of distance to goal, so heuristic not used if still -1)
                     if(ngbr.getToGoal() == -1) ngbr.setToGoal(Tools.heuristics(ngbr.getY(), ngbr.getX(), this.heuristics, t));              
 
-                    path[ngbr.getY()][ngbr.getX()]=vertex;
-        
+                    path[ngbr.getY()][ngbr.getX()]=vertex;        
                     
                     //if vertex was not yet opened, open it and place to heap. Else update its position in heap.
                     if(!ngbr.isOpened()){
@@ -133,12 +141,11 @@ public class Astar implements Algo{
                         ngbr.setOpened(true);
                     } else {
                         heap.update(ngbr);
-//                        boolean wasremoved = heap.remove(ngbr);
-//                        if(wasremoved) heap.add(ngbr);
                     }                    
                 }                                
             }
         }        
+        //no route found
         return null;
     }
     
@@ -162,6 +169,11 @@ public class Astar implements Algo{
         return t;
     }
 
+    /**
+     * UtilityStack contains all vertices that were processed during utilityMode.
+     * It is sufficient to reset only these vertices.
+     * @return utilityStack.
+     */
     public Stack<Vertex> getUtilityStack() {
         return utilityStack;
     }

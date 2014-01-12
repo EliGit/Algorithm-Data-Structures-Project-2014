@@ -6,7 +6,7 @@ package datastructures;
 
 /**
  * The class for the graph vertices. Provides functionality for storing information related to that specific vertex.
- * @author EliAir
+ * @author Elias Nygren
  */
 public class Vertex implements Comparable<Vertex>{
     private int x;
@@ -15,6 +15,7 @@ public class Vertex implements Comparable<Vertex>{
     private double Gx;
     private double Fx;
     private char key;
+    private int index;
     private boolean onPath;
     private boolean closed;
     private boolean opened;
@@ -27,6 +28,7 @@ public class Vertex implements Comparable<Vertex>{
      */
 
     public Vertex(int x, int y, char key) {
+        this.index=-1;
         this.x = x;
         this.y = y;
         this.key = key;
@@ -161,6 +163,16 @@ public class Vertex implements Comparable<Vertex>{
 //        return 1;
         
     }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    
+    
 
         @Override
         public String toString() {

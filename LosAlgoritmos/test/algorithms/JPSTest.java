@@ -10,7 +10,6 @@ import application.Cartographer;
 import datastructures.Queue;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +41,27 @@ public class JPSTest {
     @After
     public void tearDown() {
     }
-
+    
+    /**
+     * Basic pathfinding, same as for A* and Dijkstra but with diagonals.
+     * @throws Exception 
+     */
+    @Test
+    public void testBasicPath() throws Exception{
+        c = new Cartographer(new File("./maps/test4.map"));
+        t1 = new int[] {0,0};
+        t2 = new int[] {2, 2};
+        Vertex[][] map = createVertexMatrix();
+        JPS j = new JPS(map, t1, t2, LosAlgoritmos.DIAGONAL, true);
+        j.run();
+        assertTrue(j.getMap()[0][0].isOnPath());
+        assertTrue(j.getMap()[2][2].isOnPath());
+        assertEquals(2.83, j.getMap()[2][2].getDistance(), 0.05);
+    }
+    
+    /**
+     * Tests for testpruningAC.map.
+     */
     @Test
     public void testPruningA() {        
         list = jps.getNeighbors(g);   
@@ -52,6 +71,9 @@ public class JPSTest {
                 else assertFalse(list.contains(jps.getMap()[i][j]));       
     }
     
+    /**
+     * Tests for testpruningB.map.
+     */
     @Test
     public void testPruningB() throws Exception{
         customSetup(new int[] {1,0}, new int[] {1, 1}, new File("./maps/testpruningB.map"));
@@ -63,6 +85,9 @@ public class JPSTest {
                else assertFalse(list.contains(jps.getMap()[i][j]));
     }
     
+    /**
+     * Tests for testpruningAC.map. Different coordinates than testPriningA.
+     */
     @Test
     public void testPruningC() throws Exception{
         customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningAC.map"));
@@ -75,6 +100,9 @@ public class JPSTest {
                else assertFalse(list.contains(jps.getMap()[i][j]));        
     }
     
+    /**
+     * Tests for testpruningD.map.
+     */
     @Test
     public void testPruningD() throws Exception{
         customSetup(new int[] {2,0}, new int[] {1, 1}, new File("./maps/testpruningD.map"));
@@ -89,17 +117,28 @@ public class JPSTest {
     }
     
     
-    
+    /**
+     * Setup for testPrunings.
+     * @param start int[] array, [y,x]
+     * @param goal int[] array, [y,x]
+     * @param newmap testmap file
+     * @throws Exception 
+     */
     public void customSetup(int[] start, int[] goal, File newmap) throws Exception{
         c.loadMap(newmap);
         t1 = start;
         t2 = goal;
-        jps = new JPS(createVertexMatrix(), t1, t2, JPS.EUCLIDEAN, true);
+        jps = new JPS(createVertexMatrix(), t1, t2, Tools.EUCLIDEAN, true);
         s = jps.getMap()[t1[0]][t1[1]];
         g = jps.getMap()[t2[0]][t2[1]];
         jps.getPath()[t2[0]][t2[1]]=jps.getMap()[t1[0]][t1[1]];
     }
     
+    /**
+     * Builds and returns VertexMatrix based on the charMatrix loaded in Cartographer.
+     * @return
+     * @throws Exception 
+     */
     public Vertex[][] createVertexMatrix() throws Exception{
         char[][] charM = c.toCharMatrix();
         Vertex[][] vertexM = new Vertex[charM.length][charM[0].length];

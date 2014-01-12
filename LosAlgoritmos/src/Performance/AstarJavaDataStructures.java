@@ -4,7 +4,7 @@
  */
 package Performance;
 
-import datastructures.MinHeap;
+import datastructures.VertexMinHeap;
 import datastructures.Vertex;
 import java.util.ArrayDeque;
 import java.util.ArrayList;

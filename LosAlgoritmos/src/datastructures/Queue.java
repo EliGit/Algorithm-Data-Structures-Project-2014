@@ -7,7 +7,7 @@ package datastructures;
 /**
  * Lightweight standard queue implementation.
  * Fixed size: Queue fits only size-1 items.
- * @author EliAir
+ * @author Elias Nygren
  */
 public class Queue<E> {    
     private final static int DEFAULT_SIZE = 9;

@@ -4,7 +4,6 @@
  */
 package datastructures;
 
-import java.util.Arrays;
 import java.util.Random;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +15,7 @@ import static org.junit.Assert.*;
  * @author EliAir
  */
 public class MinHeapTest {
-    MinHeap heap;
+    VertexMinHeap heap;
     Random r;
     
     public MinHeapTest() {
@@ -24,12 +23,16 @@ public class MinHeapTest {
     
     @Before
     public void setUp() {
-        heap = new MinHeap(Integer.class, 10);         
+        heap = new VertexMinHeap(10);         
         r = new Random();
         for (int i = 0; i < 100; i++) {
-            heap.add(r.nextInt());
+            Vertex a = new Vertex(0,i,'.');
+            a.setDistance(r.nextDouble()+1);
+            heap.add(a);
         }
-        heap.add(Integer.MIN_VALUE);
+        Vertex b = new Vertex(0,-1,'.');
+        b.setDistance(0);
+        heap.add(b);
         assertEquals(101, heap.size());
     }
     
@@ -37,6 +40,18 @@ public class MinHeapTest {
     public void tearDown() {
     }
 
+    /**
+     * Heap should have correct size, that should decrease when polled.
+     */
+    @Test
+    public void correctMinAndHeapSizeDecreases(){
+        assertEquals(0, heap.poll().getDistance(), 0.002);
+        assertEquals(100, heap.size());
+    }
+    
+    /**
+     * Heap should have every item in correct order.
+     */
     @Test
     public void valuesInCorrectOrder() {        
         Comparable[] arr = heap.getHeap();
@@ -49,15 +64,13 @@ public class MinHeapTest {
         
     }
     
-    @Test
-    public void correctMinAndHeapSizeDecreases(){
-        assertEquals(Integer.MIN_VALUE, heap.poll());
-        assertEquals(100, heap.size());
-    }
     
+    /**
+     * Update should should preserve order and update the index of the vertex.
+     */
     @Test
     public void update(){
-        heap = new MinHeap(Vertex.class, 10);
+        heap = new VertexMinHeap(10);
         Vertex a = new Vertex(0,0,'.');
         Vertex b = new Vertex(0,0,'.');
         Vertex c = new Vertex(0,0,'.');

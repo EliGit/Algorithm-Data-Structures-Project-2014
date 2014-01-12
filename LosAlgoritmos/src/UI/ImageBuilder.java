@@ -11,11 +11,8 @@ import javax.imageio.ImageIO;
 import datastructures.Vertex;
 
 /**
- * From 
- * Functionality to write and save .map files.
- * exportImageToFile and convertRGBImage modified from: http://elsewhat.com/2006/08/17/converting-a-two-dimensional-array-of-ints-to-jpg-image-in-java/
- * 
- * @author 
+ * Functionality for GUI to present and save images generated from .map and routing data.
+ * @author Elias Nygren
  */
 
 public class ImageBuilder {
@@ -28,11 +25,10 @@ public class ImageBuilder {
     private BufferedImage bf;
     
     /**
-     * Export an image to a JPG file.
-     * !!! THIS METHOD NOT IN USE NOW !!!
-     * @param fileName The filename to export to
-     * @param image The image to write to file
-     * @throws IOException If problems occur during writing of file
+     * Export image to file.
+     * @param fileName 
+     * @param image 
+     * @throws IOException 
      */
     public void exportImageToFile(String fileName, RenderedImage image)throws IOException{
         File file = new File(fileName);
@@ -40,19 +36,18 @@ public class ImageBuilder {
         ImageIO.write(image, "jpg", file);
     }
     /**
-     * Convert rgb matrix to BufferedImage.     
-     * 
-     * @param rgbValue The two dimensional int array representing the pixels
-     * @return A BufferedImage with all the pixels drawn
+     * RGB matrix to BufferedImage.     
+     * @param RGBmatrix integer matrix containing RGB values
+     * @return BufferedImage
      */
-    private BufferedImage convertRGBImage(int[][] rgbValue){
-        int height = rgbValue.length;
-        int width = rgbValue[0].length;
+    private BufferedImage convertRGBImage(int[][] RGBmatrix){
+        int height = RGBmatrix.length;
+        int width = RGBmatrix[0].length;
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for(int y=0; y< height; y++)
             for(int x=0; x< width; x++)
-                bufferedImage.setRGB(x,y,rgbValue[y][x]);  
+                bufferedImage.setRGB(x,y,RGBmatrix[y][x]);  
         return bufferedImage;  
     }
     
@@ -95,9 +90,7 @@ public class ImageBuilder {
             Vertex v = route.pop();        
             bufferedImage.setRGB(v.getX(), v.getY(), PATH);
         }
-        
-            
-        
+
         for(int y=0; y< bf.getHeight(); y++)
             for(int x=0; x< bf.getWidth(); x++)
                 if(bufferedImage.getRGB(x, y)!=PATH)

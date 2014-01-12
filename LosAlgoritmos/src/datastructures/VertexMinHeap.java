@@ -1,32 +1,30 @@
 
 package datastructures;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
- * Binary MinHeap implementation.
+ * Binary VertexMinHeap implementation.
  * Uses an array as the underlying data structure.
- * @author EliAir
+ * @author Elias Nygren
  */
-public class MinHeap<T extends Comparable> {
+public class VertexMinHeap {
 
-    private T[] heap;
+    private Vertex[] heap;
     private int length;
     private int heapSize;
-    private HashMap<T, Integer> map;
+    
     
     /**
-     * Initializes MinHeap with the given initial size.
+     * Initializes VertexMinHeap with the given initial size.
      * @param size 
      */
     
-    public MinHeap(Class<T> c, int size) {
+    public VertexMinHeap(int size) {
         length = size + 1;
         heapSize = 0;
-        heap = (T[]) Array.newInstance(c, length);           
-        map = new HashMap<T, Integer>();
+        heap = new Vertex[length];
+        
         
     }
 
@@ -34,13 +32,13 @@ public class MinHeap<T extends Comparable> {
      * Insert value i to the heap.
      * @param v value to be added.
      */
-    public void add(T v) {
+    public void add(Vertex v) {
         heapSize++;
         if (length-1 < heapSize) {
             resizeHeap();
         }
         heap[heapSize] = v;
-        map.put(v, heapSize);
+        v.setIndex(heapSize);
                 
         int index = heapSize;
 
@@ -54,9 +52,9 @@ public class MinHeap<T extends Comparable> {
      * Remove the min value of the heap.
      * @return min value.
      */
-    public T poll(){
-        T r = heap[1];
-        map.remove(r);
+    public Vertex poll(){
+        Vertex r = heap[1];
+        r.setIndex(-1);
         heap[1] = heap[heapSize--];
         heapify(1);
         return r;
@@ -84,12 +82,9 @@ public class MinHeap<T extends Comparable> {
      * @param v the value whose position is to be updated.
      */
     
-    public void update(T v){                
-        if(!map.containsKey(v)){
-            
-            add(v);
-        }
-        int index = map.get(v);
+    public void update(Vertex v){                
+        int index = v.getIndex();
+        
 
         while (hasParent(index) && heap[index].compareTo(heap[parent(index)]) == -1) {
             swap(index, parent(index));
@@ -99,11 +94,11 @@ public class MinHeap<T extends Comparable> {
     
     
     private void swap(int a, int b){
-        T tmp = heap[a];
+        Vertex tmp = heap[a];
         heap[a] = heap[b];        
         heap[b] = tmp;        
-        map.put(heap[a], a);
-        map.put(tmp, b);
+        heap[a].setIndex(a);
+        tmp.setIndex(b);
     }
     
     private void heapify(int i){
@@ -148,7 +143,7 @@ public class MinHeap<T extends Comparable> {
      * Returns the underlying array data stucture.
      * @return 
      */
-    public T[] getHeap() {
+    public Vertex[] getHeap() {
         return heap;
     }
     

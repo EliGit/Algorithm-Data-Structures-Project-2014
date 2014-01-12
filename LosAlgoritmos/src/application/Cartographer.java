@@ -9,8 +9,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- *  Provides functionality for loading .map files to the program as a char matrix.
- * @author EliAir
+ * Provides functionality for loading .map files to the program as a char matrix.
+ * @author Elias Nygren
  */
 public class Cartographer {
     private File map;
@@ -64,8 +64,6 @@ public class Cartographer {
     }
     
     private char[][] createMatrix() throws Exception{
-//        String typeline;
-//        typeline = scanner.nextLine();
         String heightline;
         String widthline;
         try{

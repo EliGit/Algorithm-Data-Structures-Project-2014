@@ -49,10 +49,14 @@ public class CorrectPathsTest {
      */
     @Test
     public void diagonalRoutingTest() throws Exception{
-        int heuristic=LosAlgoritmos.DIAGONAL;
+        int heuristic=LosAlgoritmos.DIAGONAL-1; //-1 because heuristic++ first line of loop
         
         int i = 0;
         while(true){
+            //change heuristic, there are 2 of them in this test (diagonal equal cost, euclidean)
+            if(i%100==0) heuristic++;
+            if(heuristic>LosAlgoritmos.EUCLIDEAN) break;
+            
             //two random valid points on the map
             t1 = Tools.randomPoint(la.getVertexMatrix());
             t2 = Tools.randomPoint(la.getVertexMatrix());
@@ -79,10 +83,6 @@ public class CorrectPathsTest {
             
             assertEquals(dijkstra, astar, EPSILON);                
             assertEquals(dijkstra, jps, EPSILON);
-            
-            //change heuristic, there are 3 of them in this test (diagonal sqrt2, diagonal equal cost, euclidean)
-            if(i%200==0) heuristic++;
-            if(heuristic>LosAlgoritmos.EUCLIDEAN) break;   
             
             //this undoes all changes to the vertices left from running JPS so Tools.randomPoint works
             la.loadCharMatrix(charM);
@@ -122,39 +122,4 @@ public class CorrectPathsTest {
             la.loadCharMatrix(charM);
         }        
     }
-    
-    
-//    @Test
-//    public void dijkstraTests() throws Exception{
-//        
-//        for (int i = 0; i < 100; i++) {
-//            t1 = Tools.randomPoint(la.getVertexMatrix());
-//            t2 = Tools.randomPoint(la.getVertexMatrix());
-//            la.route(t1, t2, LosAlgoritmos.DIJKSTRA, LosAlgoritmos.NO_HEURISTIC, true);
-////            double dijkstra = la.getDistance();          
-//        }        
-//        
-//    }
-//    
-//    @Test
-//    public void astarTests() throws Exception{
-//        for (int i = 0; i < 100; i++) {
-//            t1 = Tools.randomPoint(la.getVertexMatrix());
-//            t2 = Tools.randomPoint(la.getVertexMatrix());
-//            la.route(t1, t2, LosAlgoritmos.ASTAR, LosAlgoritmos.DIAGONAL_EQUAL_COST, true);
-////            double astar = la.getDistance();
-//        }  
-//    }
-//    
-//    @Test
-//    public void JPSTests() throws Exception{
-//        for (int i = 0; i < 100; i++) {
-//            t1 = Tools.randomPoint(la.getVertexMatrix());
-//            t2 = Tools.randomPoint(la.getVertexMatrix());
-//            la.route(t1, t2, LosAlgoritmos.JPS, LosAlgoritmos.DIAGONAL_EQUAL_COST, true);
-////            double jps = la.getDistance();        
-//        }  
-//    }
-    
-    
 }

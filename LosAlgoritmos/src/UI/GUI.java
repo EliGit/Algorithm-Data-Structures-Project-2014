@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * Graphical User Interface.
- * @author EliAir
+ * @author Elias Nygren
  */
 public class GUI extends javax.swing.JFrame {
     private static final int MAPWIDTH = 500;
@@ -555,9 +555,9 @@ public class GUI extends javax.swing.JFrame {
 
         
         
-        
-        boolean performance = false;
-//        boolean performance = true;
+        //FALSE -> GUI (normal), TRUE -> performance testing (very beta, was used for coursework reporting data)
+        boolean performance = false;        
+//        boolean performance = true;        
         if(performance) new Performance().measure();
         else {
 //[365, 61], [481, 348]

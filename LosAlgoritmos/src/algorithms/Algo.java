@@ -8,8 +8,8 @@ import datastructures.Stack;
 import datastructures.Vertex;
 
 /**
- *
- * @author EliAir
+ * Interface for routing algorithms, for easier handling in performance testing.
+ * @author Elias Nygren
  */
 public interface Algo {        
     public Stack<Vertex> run();

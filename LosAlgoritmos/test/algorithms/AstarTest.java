@@ -4,8 +4,6 @@
  */
 package algorithms;
 
-import algorithms.Tools;
-import algorithms.Astar;
 import application.LosAlgoritmos;
 import datastructures.Vertex;
 import application.Cartographer;
@@ -49,7 +47,6 @@ public class AstarTest {
 
     @Test
     public void testConstructor() {
-//        assertNotNull(A.getHeap());
         assertNotNull(A.getMap());
         assertNotNull(A.getPath());
         assertNotNull(A.getS());

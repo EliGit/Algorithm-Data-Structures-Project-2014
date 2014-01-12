@@ -10,8 +10,8 @@ import datastructures.Vertex;
 import java.util.Random;
 
 /**
- *
- * @author EliAir
+ * Gathered tools used by routing algorithms, tests and GUI.
+ * @author Elias Nygren
  */
 public class Tools {
     public final static int NO_HEURISTIC = 0;
@@ -23,9 +23,8 @@ public class Tools {
     
     
      /**
-     * Implementations of A* heuristics.
+     * Implementations of A*, JPS heuristics.
      * When Dijkstra (no heuristics) selected, returns -1
-     * 
      * @param y y coordinate of current vertex
      * @param x x coordinate of current vertex
      * @param heuristic selected heuristic
@@ -72,7 +71,7 @@ public class Tools {
      * @return a list of the neighbors
      */
     public Queue<Vertex> getNeighbors(Vertex[][] map, Vertex u, String directions){
-        Queue<Vertex> ngbrs = new Queue<Vertex>();
+        Queue<Vertex> ngbrs = new Queue<>();
         for(char c : directions.toCharArray()){
             Vertex v = getNeighbor(map, u, c);    
             //if v valid (within the map)
@@ -140,6 +139,8 @@ public class Tools {
     }
     
     
+    
+    
     /**
      * Returns a random, valid, point on the map.
      * @param map
@@ -149,7 +150,6 @@ public class Tools {
         Random r = new Random();
         int x = r.nextInt(map[0].length);
         int y = r.nextInt(map.length);
-//        LosAlgoritmos la = new LosAlgoritmos();
         return closestValidCoordinate(map, new int[] {y,x});
     }
     
@@ -158,33 +158,30 @@ public class Tools {
      * Checks that coordinate is valid, if not, returns the closest valid coordinate.
      * Moves coordinate to within the map and uses Dijkstra(Astar, NO_HEURISTIC) with utilitymode.
      * @param coord coordinate to be validated.
-     * @return closest valid coordinate.
+     * @return closest valid coordinate. Null if vertexMatrix not loaded.
      */
-    public int[] closestValidCoordinate(Vertex[][] vertexMatrix, int[] coord){
-        
+    public int[] closestValidCoordinate(Vertex[][] vertexMatrix, int[] coord){        
         if(vertexMatrix==null) return null;
         if(valid(coord[0], coord[1], vertexMatrix)) return coord;                
         
         int y = coord[0];
         int x = coord[1];
         
-        
+        //move coordinate inside the map
         if(y<0) y=0;
         if(y>=vertexMatrix.length) y=vertexMatrix.length-1;
         if(x<0) x=0;
         if(x>=vertexMatrix[0].length) x=vertexMatrix[0].length-1;
         int[] newcoord = new int[] {y,x};
-//        System.out.println(Arrays.toString(newcoord));
         
-//        System.out.print("Invalid coordinate, finding closest valid coordinate: ");
-        
+        //dijkstra
         Astar A = new Astar(vertexMatrix, newcoord, newcoord, NO_HEURISTIC, true, true);
         Stack<Vertex> s = A.run();
         Vertex v = s.pop();
         y = v.getY();
         x = v.getX();
         
-        //undo any changes
+        //undo any changes made by dijkstra
         Stack<Vertex> utilityStack = A.getUtilityStack();
         while(!utilityStack.isEmpty()){
             Vertex vertex = utilityStack.pop();
@@ -196,7 +193,6 @@ public class Tools {
             vertex.setOpened(false);
         }
 
-//        System.out.println(" {y: " + y + " x: " + x+ "}");
         return new int[] {y, x};
         
     }
