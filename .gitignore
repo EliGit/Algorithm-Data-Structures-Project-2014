@@ -1,9 +1,1 @@
-*.class
 
-# Package Files #
-*.jar
-*.war
-*.ear
-/LosAlgoritmos/nbproject/private/
-/LosAlgoritmos/build/
-/LosAlgoritmos/dist/
