@@ -2,9 +2,9 @@ TiraLabra2013
 =============================
 
 Kaikki tarvittava tässä repossa.
-Suoritus: Netbeans
-JavaDoc: LosAlgoritmos/dist/javadoc
-Vaadittu dokumentaatio: Dokumentaatio pdf - Wikissä kuitenkin helppolukuisempana!
+Suoritus: Netbeans  
+JavaDoc: LosAlgoritmos/dist/javadoc  
+Vaadittu dokumentaatio: Dokumentaatio pdf - Wikissä kuitenkin helppolukuisempana!  
 
 
 
