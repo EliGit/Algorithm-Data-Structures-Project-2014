@@ -1,4 +1,4 @@
-TiraLabra2013 
+Helsingin Yliopisto, Tietorakenteet ja Algoritmit harjoitustyö, TiraLabra2013 
 =============================
 
 Kaikki tarvittava tässä repossa.
@@ -10,7 +10,7 @@ Vaadittu dokumentaatio: Dokumentaatio pdf - Wikissä kuitenkin helppolukuisempan
 
 
 =============================
-LosAlgoritmos - a Java pathfinding library for pathfinding in 2D grids. Contains Dijkstra, A* and Jump Point Search algorithms with Manhattan, Chebyshev (Diagonal with Sqrt(2) and equal costs) and Euclidean heuristics.
+Pathfinding in 2D grids. Contains Dijkstra, A* and Jump Point Search algorithms with Manhattan, Chebyshev (Diagonal with Sqrt(2) and equal costs) and Euclidean heuristics.
 
 Input: char[][] matrices with '.' as walkable vertices and anything else as non-walkable. Directly supports .map files from [here](http://movingai.com/benchmarks/). Contains a simple UI for visual testing. Extensive jUnit tests. JavaDoc in English.
 
