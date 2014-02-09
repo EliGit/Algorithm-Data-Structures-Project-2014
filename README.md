@@ -1,13 +1,8 @@
-Helsingin Yliopisto, Tietorakenteet ja Algoritmit harjoitustyö, TiraLabra2013 
+Algorithms & Data Structures Project 
 =============================
+University of Helsinki, Computer Science
 
-Kaikki tarvittava tässä repossa.
-Suoritus: Netbeans  
-JavaDoc: LosAlgoritmos/dist/javadoc  
-Vaadittu dokumentaatio: Dokumentaatio pdf - Wikissä kuitenkin helppolukuisempana!  
-
-
-
+See [wiki](https://github.com/EliGit/TiraLabra2013/wiki) for documentation and weekly reports (in Finnish)
 
 =============================
 Pathfinding in 2D grids. Contains Dijkstra, A* and Jump Point Search algorithms with Manhattan, Chebyshev (Diagonal with Sqrt(2) and equal costs) and Euclidean heuristics.
@@ -16,4 +11,4 @@ Input: char[][] matrices with '.' as walkable vertices and anything else as non-
 
 (c) Elias Nygren
 
-See [wiki](https://github.com/EliGit/TiraLabra2013/wiki) for documentation and weekly reports (in Finnish)
+
